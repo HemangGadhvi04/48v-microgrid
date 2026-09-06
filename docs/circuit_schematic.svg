@@ -1,0 +1,124 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500" width="100%" height="100%">
+  <defs>
+    <style>
+      .text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+      .title { font-weight: 700; font-size: 18px; fill: #1e293b; }
+      .label { font-size: 13px; fill: #334155; font-weight: 500; }
+      .sublabel { font-size: 11px; fill: #64748b; }
+      .wire { stroke: #0f172a; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+      .wire-thin { stroke: #64748b; stroke-width: 1.5; stroke-dasharray: 4 3; fill: none; }
+      .component { fill: #f8fafc; stroke: #0f172a; stroke-width: 2; }
+      .switch { fill: #3b82f6; stroke: #1d4ed8; stroke-width: 2; }
+      .dc-bus { stroke: #dc2626; stroke-width: 3; }
+      .gnd-bus { stroke: #2563eb; stroke-width: 3; }
+      .badge { fill: #e0e7ff; stroke: #6366f1; stroke-width: 1.5; rx: 6; }
+      .badge-txt { font-size: 11px; fill: #4338ca; font-weight: 600; text-anchor: middle; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="500" fill="#ffffff" rx="12" />
+  <rect x="15" y="15" width="870" height="470" fill="none" stroke="#e2e8f0" stroke-width="1.5" rx="10" />
+
+  <!-- Header -->
+  <text x="40" y="50" class="text title">48V Single-Phase H-Bridge Inverter with LC Low-Pass Filter (500W)</text>
+  <text x="40" y="72" class="text sublabel">Topology: 4-Switch Full-Bridge VSI | Modulation: Unipolar SPWM (fsw = 20 kHz) | Output: 28.85 Vrms, 50 Hz</text>
+
+  <!-- DC Source -->
+  <line x1="80" y1="140" x2="80" y2="360" class="wire" />
+  <!-- DC Source battery symbol -->
+  <line x1="60" y1="230" x2="100" y2="230" class="wire dc-bus" />
+  <line x1="68" y1="245" x2="92" y2="245" class="wire gnd-bus" />
+  <line x1="60" y1="260" x2="100" y2="260" class="wire dc-bus" />
+  <line x1="68" y1="275" x2="92" y2="275" class="wire gnd-bus" />
+  <text x="50" y="210" class="text label">Vdc = 48V</text>
+  <text x="50" y="305" class="text sublabel">Battery / DC</text>
+
+  <!-- DC Bus Bars -->
+  <line x1="80" y1="140" x2="420" y2="140" class="wire dc-bus" />
+  <line x1="80" y1="360" x2="420" y2="360" class="wire gnd-bus" />
+  <text x="210" y="130" class="text sublabel" fill="#dc2626">+48V DC Link</text>
+  <text x="210" y="380" class="text sublabel" fill="#2563eb">0V Return</text>
+
+  <!-- DC Bus Decoupling Cap -->
+  <line x1="160" y1="140" x2="160" y2="230" class="wire" />
+  <rect x="150" y="230" width="20" height="40" class="component" />
+  <line x1="160" y1="270" x2="160" y2="360" class="wire" />
+  <text x="178" y="250" class="text label">Cdc</text>
+  <text x="178" y="265" class="text sublabel">1000 µF</text>
+
+  <!-- Leg A: S1 (top) and S2 (bottom) -->
+  <line x1="260" y1="140" x2="260" y2="170" class="wire" />
+  <!-- S1 -->
+  <rect x="240" y="170" width="40" height="45" rx="4" class="switch" />
+  <text x="260" y="198" class="text label" fill="#ffffff" text-anchor="middle">S1</text>
+  <line x1="260" y1="215" x2="260" y2="285" class="wire" />
+  <!-- S2 -->
+  <rect x="240" y="285" width="40" height="45" rx="4" class="switch" />
+  <text x="260" y="313" class="text label" fill="#ffffff" text-anchor="middle">S2</text>
+  <line x1="260" y1="330" x2="260" y2="360" class="wire" />
+
+  <!-- Leg B: S3 (top) and S4 (bottom) -->
+  <line x1="380" y1="140" x2="380" y2="170" class="wire" />
+  <!-- S3 -->
+  <rect x="360" y="170" width="40" height="45" rx="4" class="switch" />
+  <text x="380" y="198" class="text label" fill="#ffffff" text-anchor="middle">S3</text>
+  <line x1="380" y1="215" x2="380" y2="285" class="wire" />
+  <!-- S4 -->
+  <rect x="360" y="285" width="40" height="45" rx="4" class="switch" />
+  <text x="380" y="313" class="text label" fill="#ffffff" text-anchor="middle">S4</text>
+  <line x1="380" y1="330" x2="380" y2="360" class="wire" />
+
+  <!-- Midpoint A -->
+  <circle cx="260" cy="250" r="4" fill="#0f172a" />
+  <text x="235" y="255" class="text label">A</text>
+  <line x1="260" y1="250" x2="460" y2="250" class="wire" />
+
+  <!-- Midpoint B -->
+  <circle cx="380" cy="250" r="4" fill="#0f172a" />
+  <text x="395" y="255" class="text label">B</text>
+  <line x1="380" y1="250" x2="380" y2="420" class="wire" />
+  <line x1="380" y1="420" x2="720" y2="420" class="wire" />
+
+  <!-- LC Filter Inductor Lf -->
+  <!-- Inductor symbol (4 arcs) -->
+  <path d="M 460 250 q 10 -15 20 0 q 10 -15 20 0 q 10 -15 20 0 q 10 -15 20 0" class="wire" />
+  <text x="480" y="225" class="text label">Lf = 100 µH</text>
+  <text x="480" y="240" class="text sublabel">ESR = 15 mΩ</text>
+  <line x1="540" y1="250" x2="620" y2="250" class="wire" />
+
+  <!-- Filter Capacitor Cf + Rd branch -->
+  <circle cx="620" cy="250" r="4" fill="#0f172a" />
+  <line x1="620" y1="250" x2="620" y2="290" class="wire" />
+  <!-- Damping Resistor Rd -->
+  <rect x="610" y="290" width="20" height="35" class="component" />
+  <text x="638" y="312" class="text label">Rd = 0.5 Ω</text>
+  <line x1="620" y1="325" x2="620" y2="350" class="wire" />
+  <!-- Capacitor Cf -->
+  <line x1="605" y1="350" x2="635" y2="350" class="wire" stroke-width="3" />
+  <line x1="605" y1="360" x2="635" y2="360" class="wire" stroke-width="3" />
+  <text x="645" y="360" class="text label">Cf = 47 µF</text>
+  <line x1="620" y1="360" x2="620" y2="420" class="wire" />
+  <circle cx="620" cy="420" r="4" fill="#0f172a" />
+
+  <!-- Load Line -->
+  <line x1="620" y1="250" x2="720" y2="250" class="wire" />
+  <circle cx="720" cy="250" r="4" fill="#0f172a" />
+  <circle cx="720" cy="420" r="4" fill="#0f172a" />
+
+  <!-- Load Resistor Rload -->
+  <line x1="720" y1="250" x2="720" y2="300" class="wire" />
+  <rect x="705" y="300" width="30" height="60" class="component" fill="#fef08a" stroke="#ca8a04" />
+  <text x="745" y="325" class="text label">Rload = 1.665 Ω</text>
+  <text x="745" y="342" class="text sublabel">500W Pure Active Load</text>
+  <line x1="720" y1="360" x2="720" y2="420" class="wire" />
+
+  <!-- AC Output Voltage Probe -->
+  <rect x="760" y="240" width="105" height="40" class="badge" />
+  <text x="812" y="258" class="badge-txt">Vac = 28.85 Vrms</text>
+  <text x="812" y="272" class="badge-txt" fill="#6366f1">THD &lt; 2.5%</text>
+
+  <!-- SPWM Controller Box -->
+  <rect x="230" y="440" width="200" height="40" rx="6" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5" />
+  <text x="330" y="465" class="text label" text-anchor="middle">SPWM Controller (C2000)</text>
+</svg>

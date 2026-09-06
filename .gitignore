@@ -1,0 +1,39 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# MATLAB / Simulink
+*.asv
+*.slxc
+*.autosave
+slprj/
+*.mex*
+*.log
+codegen/
+*.m~
+sfun_*.c
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.env
+.venv
+env/
+venv/
+ENV/
+
+# KiCad
+*.kicad_pcb-bak
+*.sch-bak
+*-save.kicad_pcb
+*-save.sch
+_autosave-*
+*.net
+*.xml
+
+# IDEs
+.idea/
+.vscode/
