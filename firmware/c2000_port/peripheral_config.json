@@ -1,0 +1,30 @@
+{
+  "cpu_clock_hz": 200000000,
+  "epwm_clock_hz": 100000000,
+  "switching_frequency_hz": 20000,
+  "counter_mode": "up_down",
+  "dead_time_ns": 100,
+  "control_deadline_us": 35,
+  "adc_resolution_bits": 12,
+  "adc_clock_hz": 50000000,
+  "adc_acquisition_sysclk_cycles": 40,
+  "adc_conversion_sysclk_cycles": 44,
+  "adc_trigger": "EPWM1_SOCA_ZERO",
+  "adc_modules": {
+    "A": [
+      {"soc": 0, "channel": 14, "signal": "pv_voltage"},
+      {"soc": 1, "channel": 3, "signal": "dc_inductor_current"},
+      {"soc": 2, "channel": 2, "signal": "grid_current"},
+      {"soc": 3, "channel": 0, "signal": "heatsink_temperature"}
+    ],
+    "B": [
+      {"soc": 0, "channel": 3, "signal": "pv_current"},
+      {"soc": 1, "channel": 2, "signal": "utility_voltage"}
+    ],
+    "C": [
+      {"soc": 0, "channel": 3, "signal": "dc_bus_voltage"},
+      {"soc": 1, "channel": 2, "signal": "grid_voltage"}
+    ]
+  },
+  "adc_completion_interrupt": {"module": "A", "soc": 3, "interrupt": 1}
+}

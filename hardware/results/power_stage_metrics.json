@@ -1,0 +1,87 @@
+{
+  "corners": [
+    {
+      "vin_v": 35.0,
+      "vout_v": 42.0,
+      "mode": "boost",
+      "duty": 0.16666666666666663,
+      "average_inductor_current_a": 15.037593984962406,
+      "ripple_pp_a": 0.5833333333333333,
+      "peak_inductor_current_a": 15.329260651629072,
+      "rms_inductor_current_a": 15.038536808415207
+    },
+    {
+      "vin_v": 35.0,
+      "vout_v": 54.0,
+      "mode": "boost",
+      "duty": 0.35185185185185186,
+      "average_inductor_current_a": 15.037593984962406,
+      "ripple_pp_a": 1.2314814814814814,
+      "peak_inductor_current_a": 15.653334725703147,
+      "rms_inductor_current_a": 15.041795495989838
+    },
+    {
+      "vin_v": 58.0,
+      "vout_v": 42.0,
+      "mode": "buck",
+      "duty": 0.7241379310344828,
+      "average_inductor_current_a": 11.904761904761905,
+      "ripple_pp_a": 1.1586206896551725,
+      "peak_inductor_current_a": 12.484072249589492,
+      "rms_inductor_current_a": 11.909459384635324
+    },
+    {
+      "vin_v": 58.0,
+      "vout_v": 54.0,
+      "mode": "buck",
+      "duty": 0.9310344827586207,
+      "average_inductor_current_a": 9.25925925925926,
+      "ripple_pp_a": 0.37241379310344824,
+      "peak_inductor_current_a": 9.445466155810983,
+      "rms_inductor_current_a": 9.259883352376502
+    }
+  ],
+  "worst_corner": {
+    "vin_v": 35.0,
+    "vout_v": 54.0,
+    "mode": "boost",
+    "duty": 0.35185185185185186,
+    "average_inductor_current_a": 15.037593984962406,
+    "ripple_pp_a": 1.2314814814814814,
+    "peak_inductor_current_a": 15.653334725703147,
+    "rms_inductor_current_a": 15.041795495989838
+  },
+  "dc_input_current_at_minimum_v_a": 15.037593984962406,
+  "recommended_inductor_saturation_current_a": 20.34933514341409,
+  "converter_losses_w": {
+    "mosfet_conduction": 2.0815516280372575,
+    "mosfet_switching": 0.43609022556390975,
+    "gate_drive": 0.05664,
+    "dead_time": 0.0481203007518797,
+    "inductor_copper": 3.393834176147702,
+    "inductor_core_estimate": 2.0,
+    "auxiliary_estimate": 1.1,
+    "total": 9.11623633050075
+  },
+  "inverter_losses_w": {
+    "mosfet_conduction": 2.7633519459103892,
+    "mosfet_switching": 0.8425837274260612,
+    "gate_drive": 0.11328,
+    "dead_time": 0.049930887551174,
+    "lcl_copper": 7.208744206722755,
+    "damping_estimate": 1.0,
+    "total": 11.97789076761038
+  },
+  "ac_current_rms_a": 17.33102253032929,
+  "ac_current_peak_a": 24.509767112185358,
+  "dc_link_required_capacitance_f": 0.016578639905405763,
+  "dc_link_predicted_ripple_pp_v": 1.1052426603603842,
+  "dc_link_voltage_rating_margin": 1.8518518518518519,
+  "mosfet_voltage_rating_margin": 1.7241379310344827,
+  "lcl_resonant_frequency_hz": 5032.921210448704,
+  "precharge_90_percent_s": 3.246644981121604,
+  "precharge_initial_power_w": 62.04255319148936,
+  "dc_link_stored_energy_j": 43.739999999999995,
+  "estimated_total_loss_w": 21.09412709811113,
+  "estimated_system_efficiency": 0.9595195455078703
+}

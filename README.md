@@ -59,6 +59,22 @@ An open-source, research-grade microgrid development platform designed for lab-b
 | **Primary Controller** | MATLAB/Simulink Simulation | TI C2000 LaunchPad (TMS320F28379D) |
 | **Communication Protocol** | SunSpec Modbus RTU over RS-485 | Modbus RTU + InfluxDB + Grafana |
 
+Current simulation baseline: the complete PV-to-grid chain is executable and
+passes automated electrical checks. The standalone grid-following baseline
+injects 499.5 W at 0.9994 power factor with 2.72% current THD and separately
+demonstrates 150 var reactive-power injection. The coupled run holds the 48 V
+bus within its acceptance range across irradiance and temperature changes,
+captures at least 99.5% of available PV power in all settled windows, exercises
+both buck and boost operation, and closes its energy balance to 0.000032% of PV
+energy. This is a 28.85 V RMS research-grid simulation and is not a 230 V
+utility connection.
+
+The portable Phase 2 firmware foundation is also executable on a host compiler:
+PI and P&O control, four-switch buck-boost control, SOGI-PLL, PR current control,
+and the protection supervisor pass their tests. See
+[`docs/PROJECT_EXECUTION_STATUS.md`](docs/PROJECT_EXECUTION_STATUS.md) for the
+current completion estimate and remaining execution gates.
+
 ---
 
 ## 3. Four-Phase Master Roadmap
@@ -92,13 +108,18 @@ An open-source, research-grade microgrid development platform designed for lab-b
 ├── .gitignore                    # Ignore rules for MATLAB, Python, KiCad
 ├── docs/                         # Technical documentation, derivations, and guides
 │   ├── ROADMAP_12_WEEKS.md       # Detailed 12-week Phase 1 simulation breakdown
+│   ├── phase1_simulation_report.md # Validated Phase 1 results and limits
+│   ├── phase2_hardware_specification.md # Isolated hardware-test requirements
 │   ├── design_notes_lc_filter.md # LC and LCL filter mathematical derivations
 │   └── archive/                  # Historical planning transcripts and archives
 ├── simulations/                  # MATLAB and Simulink models
 │   ├── inverter/                 # H-bridge, SPWM generator, and LC/LCL filter models
 │   ├── pv_model/                 # Single-diode PV model functions and I-V curves
 │   ├── mppt/                     # P&O and incremental conductance MPPT
-│   └── grid_sync/                # SOGI-PLL and grid monitoring blocks
+│   ├── grid_sync/                # SOGI-PLL and grid monitoring blocks
+│   ├── system/                   # Coupled PV/DC-DC/DC-link/grid validation
+│   ├── battery/                  # Bidirectional battery ECM and energy validation
+│   └── microgrid/                # Droop, islanding, synchronization and reconnection
 ├── hardware/                     # KiCad schematics, PCB layouts, and BOMs
 ├── firmware/                     # TI C2000 CCS projects and C control routines
 └── comms/                        # Modbus RS-485, Python edge polling, Grafana dashboards
@@ -108,9 +129,29 @@ An open-source, research-grade microgrid development platform designed for lab-b
 
 ## 5. Quickstart & Phase 1 Execution
 
+Run all fast host-side hardware, firmware, protocol, and generated-artifact checks:
+
+```sh
+make test
+```
+
+Run the longer MATLAB simulation regressions separately:
+
+```sh
+make test-matlab
+```
+
 ### Prerequisites
 - **MATLAB & Simulink** (R2024b / R2025b or later with Simscape Electrical)
 - **Git**
+
+Run the complete Phase 1 regression suite from the repository root:
+
+```matlab
+cd('/Users/hemanggadhvi/Desktop/48V microgrid')
+addpath('/Users/hemanggadhvi/Desktop/48V microgrid/simulations')
+summary = run_phase1_validation();
+```
 
 ### Running Inverter Parameters
 Initialize parameters in MATLAB:
@@ -120,6 +161,77 @@ inverter_params
 ```
 Open the Simulink model:
 ```matlab
-open_system('hbridge_inverter_lc.slx')
-sim('hbridge_inverter_lc')
+open_system('hbridge_inverter_lc_open_loop.slx')
+sim('hbridge_inverter_lc_open_loop')
 ```
+
+Build or open and run the open-loop Week 2 model:
+```matlab
+cd('/Users/hemanggadhvi/Desktop/48V microgrid/simulations/inverter')
+run('run_open_loop_inverter.m')
+```
+
+Run the closed-loop islanded inverter milestone. It regulates the 28.85 V RMS
+output through a 250 W to 500 W resistive load step:
+```matlab
+cd('/Users/hemanggadhvi/Desktop/48V microgrid/simulations/inverter')
+run('run_closed_loop_inverter.m')
+```
+
+Design and validate the LCL filter, grid interface, SOGI-PLL, and complete
+grid-following inverter:
+
+```matlab
+cd('/Users/hemanggadhvi/Desktop/48V microgrid/simulations/grid_tie')
+run('design_lcl_filter.m')
+run('run_lcl_grid_model.m')
+
+cd('/Users/hemanggadhvi/Desktop/48V microgrid/simulations/grid_sync')
+run('run_sogi_pll_tests.m')
+
+cd('/Users/hemanggadhvi/Desktop/48V microgrid/simulations/grid_tie')
+run('run_grid_following_model.m')
+```
+
+Validate the PV source and P&O MPPT:
+
+```matlab
+cd('/Users/hemanggadhvi/Desktop/48V microgrid/simulations/pv_model')
+run('run_pv_validation.m')
+
+cd('/Users/hemanggadhvi/Desktop/48V microgrid/simulations/mppt')
+run('run_po_mppt_validation.m')
+```
+
+Run the end-to-end PV, four-switch buck-boost, dynamic 48 V DC-link, switching
+inverter, LCL filter, and grid validation:
+
+```matlab
+cd('/Users/hemanggadhvi/Desktop/48V microgrid/simulations/system')
+report = run_solar_grid_validation();
+```
+
+See [`docs/phase1_simulation_report.md`](docs/phase1_simulation_report.md) for
+the retained metrics, acceptance criteria, and limits of the result. The next
+execution stage is the isolated Phase 2 power-electronics testbench defined in
+[`docs/phase2_hardware_specification.md`](docs/phase2_hardware_specification.md).
+
+Run the battery and microgrid-transition regression suite:
+
+```matlab
+addpath('/Users/hemanggadhvi/Desktop/48V microgrid/simulations')
+summary = run_phase3_validation();
+```
+
+See [`docs/phase3_simulation_report.md`](docs/phase3_simulation_report.md) for
+the validated scope and the limits of the dynamic-phasor transition evidence.
+
+Validate the Phase 4 Modbus, SunSpec, logging, and InfluxDB gateway code:
+
+```sh
+python3 -m unittest discover -s comms/tests -v
+python3 comms/simulate_gateway.py
+```
+
+See [`docs/phase4_telemetry_report.md`](docs/phase4_telemetry_report.md) for the
+implemented data path and remaining physical commissioning gates.

@@ -4,7 +4,7 @@ This directory contains hardware schematics, PCB layouts, Bill of Materials (BOM
 
 ## Hardware Roadmap
 1. **Synchronous Buck-Boost DC-DC Converter (Phase 2)**:
-   - Input: $20\text{V} - 60\text{V}$ (Solar PV emulator / array)
+   - Input: $0\text{V} - 60\text{V}$ startup envelope; $35\text{V} - 58\text{V}$ full-power design range
    - Output: Regulated $48\text{V}$ DC bus
    - Power Rating: $500\text{W}$
    - Switches: Dual N-channel MOSFETs or GaN Half-Bridge evaluation module
@@ -25,3 +25,29 @@ This directory contains hardware schematics, PCB layouts, Bill of Materials (BOM
 4. **Tools**:
    - KiCad 8.x / Altium Designer
    - Gerber generation following standard 4-layer stackup (Signal - GND - Power - Signal)
+
+## Executable sizing package
+
+The initial power-stage assumptions live in `design_inputs.json`. Recalculate
+all voltage/current corners, first-pass losses, DC-link ripple, LCL resonance,
+and precharge stress with:
+
+```sh
+python3 hardware/calculate_power_stage.py
+python3 hardware/calculate_sensing.py
+python3 hardware/calculate_magnetics.py
+python3 -m unittest discover -s hardware/tests -v
+```
+
+Outputs are retained in `hardware/results/`. The `reference_bom.csv` file
+separates selected prototype items, reference candidates, and parts that cannot
+be frozen until magnetic, thermal, mechanical, or measured overshoot work is
+complete. A candidate designation is not purchasing approval.
+
+Candidate device claims and official source links are recorded in
+`component_sources.md`. The logical PWM, ADC, protection, and ISR interface is
+defined in `firmware/c2000_port/README.md`.
+
+The schematic capture source is `schematic_specification.md`; it defines power
+domains, named nets, gate interlocks, sensing placement, precharge, and the
+controller connector before physical pin numbers are committed.

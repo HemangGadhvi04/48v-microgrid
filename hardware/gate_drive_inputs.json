@@ -1,0 +1,26 @@
+{
+  "driver": "UCC27211A",
+  "driver_count": 4,
+  "gate_drive_voltage_v": 12.0,
+  "switching_frequency_hz": 20000.0,
+  "maximum_high_side_duty": 0.98,
+  "mosfet_gate_charge_c": 1.18e-07,
+  "bootstrap_capacitance_f": 1e-07,
+  "bootstrap_capacitance_tolerance_minus_fraction": 0.05,
+  "bootstrap_driver_current_a_max": 0.00012,
+  "bootstrap_diode_forward_voltage_v_max": 1.05,
+  "bootstrap_uvlo_rising_v_max": 7.9,
+  "vdd_decoupling_f": 4.7e-06,
+  "driver_delay_mismatch_s_max": 1.7e-08,
+  "driver_fall_delay_s_max": 3e-08,
+  "hardware_logic_delay_s_max": 5.5e-08,
+  "configured_dead_time_s": 1e-07,
+  "interlock": {
+    "safety_and": "SN74HCS21QPWRQ1",
+    "pwm_and": "SN74LVC08AQPWRG4Q1",
+    "trip_latch_logic": "SN74HCS02QPWRQ1",
+    "bias_supervisor": "TPS3700QDSERQ1",
+    "relay_driver": "PMV37ENEA",
+    "relay_flyback_diode": "MURS120T3G"
+  }
+}

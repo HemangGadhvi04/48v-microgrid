@@ -1,0 +1,62 @@
+{
+  "dc_bus": {
+    "maximum_voltage_v": 54.0,
+    "rated_power_w": 500.0,
+    "line_frequency_hz": 50.0,
+    "maximum_ripple_pp_v": 2.0,
+    "capacitor_part": "ALS31A103KE100",
+    "capacitor_quantity": 3,
+    "capacitance_each_f": 0.01,
+    "capacitance_tolerance_minus_fraction": 0.2,
+    "voltage_rating_v": 100.0,
+    "ripple_rating_each_a_rms_100hz_85c": 10.1,
+    "esr_each_ohm_100hz_20c": 0.028
+  },
+  "precharge": {
+    "part": "HSC10047RJ",
+    "resistance_ohm": 47.0,
+    "continuous_rating_w_with_required_heatsink": 100.0
+  },
+  "lcl_capacitor": {
+    "part": "C4AQUBW5200A3MJ",
+    "capacitance_f": 0.00002,
+    "tolerance_fraction": 0.05,
+    "voltage_rating_vdc": 1300.0,
+    "ripple_rating_a_rms_10khz_70c": 18.3,
+    "bus_voltage_rms_v": 28.85,
+    "frequency_hz": 50.0
+  },
+  "damping_resistor": {
+    "part": "HSC100R56J",
+    "resistance_ohm": 0.56,
+    "continuous_rating_w_with_required_heatsink": 100.0,
+    "allocated_loss_w": 1.0
+  },
+  "dc_fuse": {
+    "part": "JLLN030.T",
+    "current_rating_a": 30.0,
+    "voltage_rating_vdc": 160.0,
+    "dc_interrupt_rating_a": 50000.0
+  },
+  "power_connector": {
+    "family": "Anderson SB50",
+    "continuous_current_rating_a": 50.0,
+    "voltage_rating_v": 600.0,
+    "selected_wire_awg": 8,
+    "design_current_a": 25.0
+  },
+  "main_contactor": {
+    "family": "Albright SW80B",
+    "contact_voltage_rating_vdc": 96.0,
+    "thermal_current_rating_a": 100.0,
+    "coil_voltage_vdc": 12.0,
+    "required_options": "continuous-duty coil, auxiliary contact, magnetic blowouts"
+  },
+  "ac_contactor": {
+    "part": "G9KA-1A1B-E DC12",
+    "contact_voltage_rating_vac": 800.0,
+    "current_rating_a": 260.0,
+    "coil_voltage_vdc": 12.0,
+    "has_mirror_auxiliary_contact": true
+  }
+}

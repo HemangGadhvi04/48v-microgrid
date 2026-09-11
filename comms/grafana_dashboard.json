@@ -1,0 +1,60 @@
+{
+  "annotations": {"list": []},
+  "editable": true,
+  "graphTooltip": 1,
+  "panels": [
+    {
+      "datasource": {"type": "influxdb", "uid": "${DS_INFLUXDB}"},
+      "fieldConfig": {"defaults": {"unit": "watt"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+      "id": 1,
+      "targets": [{"query": "from(bucket: v.bucket) |> range(start: v.timeRangeStart, stop: v.timeRangeStop) |> filter(fn: (r) => r._measurement == \"microgrid\" and (r._field == \"active_power_w\" or r._field == \"dc_power_w\")) |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)", "refId": "A"}],
+      "title": "AC and DC Power",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "influxdb", "uid": "${DS_INFLUXDB}"},
+      "fieldConfig": {"defaults": {"unit": "volt"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0},
+      "id": 2,
+      "targets": [{"query": "from(bucket: v.bucket) |> range(start: v.timeRangeStart, stop: v.timeRangeStop) |> filter(fn: (r) => r._measurement == \"microgrid\" and (r._field == \"ac_voltage_v\" or r._field == \"dc_voltage_v\")) |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)", "refId": "A"}],
+      "title": "Bus Voltages",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "influxdb", "uid": "${DS_INFLUXDB}"},
+      "fieldConfig": {"defaults": {"unit": "hertz"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 8, "x": 0, "y": 8},
+      "id": 3,
+      "targets": [{"query": "from(bucket: v.bucket) |> range(start: v.timeRangeStart, stop: v.timeRangeStop) |> filter(fn: (r) => r._measurement == \"microgrid\" and r._field == \"frequency_hz\") |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)", "refId": "A"}],
+      "title": "Grid Frequency",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "influxdb", "uid": "${DS_INFLUXDB}"},
+      "fieldConfig": {"defaults": {"unit": "celsius"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 8, "x": 8, "y": 8},
+      "id": 4,
+      "targets": [{"query": "from(bucket: v.bucket) |> range(start: v.timeRangeStart, stop: v.timeRangeStop) |> filter(fn: (r) => r._measurement == \"microgrid\" and (r._field == \"cabinet_temperature_c\" or r._field == \"heatsink_temperature_c\")) |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)", "refId": "A"}],
+      "title": "Temperatures",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "influxdb", "uid": "${DS_INFLUXDB}"},
+      "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 8, "x": 16, "y": 8},
+      "id": 5,
+      "targets": [{"query": "from(bucket: v.bucket) |> range(start: v.timeRangeStart, stop: v.timeRangeStop) |> filter(fn: (r) => r._measurement == \"microgrid\" and (r._field == \"operating_state\" or r._field == \"event_bits\" or r._field == \"poll_errors\")) |> last()", "refId": "A"}],
+      "title": "State, Events, and Poll Errors",
+      "type": "stat"
+    }
+  ],
+  "schemaVersion": 39,
+  "tags": ["microgrid", "SunSpec", "Modbus"],
+  "templating": {"list": []},
+  "time": {"from": "now-15m", "to": "now"},
+  "timezone": "browser",
+  "title": "48 V Microgrid Telemetry",
+  "uid": "microgrid-48v",
+  "version": 1
+}

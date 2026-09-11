@@ -1,0 +1,33 @@
+reference,function,quantity,candidate,minimum_requirement,status,evidence
+Q1-Q8,Power MOSFET,8,CSD19536KCS,100 V N-channel; hot RDS(on) used in loss model,REFERENCE_CANDIDATE,TI product page and Rev C datasheet
+U1-U4,Half-bridge gate driver,4,UCC27211A,120 V bootstrap driver; independent inputs; UVLO,REFERENCE_CANDIDATE,TI Rev D datasheet
+U5,Controller,1,LAUNCHXL-F28379D,200 MHz C2000 F28379D development board,SELECTED_FOR_PROTOTYPE,TI development-kit page
+U6-U8,Isolated current sensor,3,TMCS1123B2AQDVGRQ1,"3.3 V; 50 mV/A; +/-31 A linear range; 250 kHz bandwidth; fast overcurrent alert",REFERENCE_CANDIDATE,TI Rev D datasheet
+LDC,DC-DC inductor,1,Custom or catalog part,500 uH; saturation at least 25 A; DCR at most 15 mOhm; characterized core loss,ENGINEERING_REQUIRED,Power-stage calculation
+L1,Inverter-side LCL inductor,1,Custom or catalog part,150 uH; saturation at least 30 A; low-loss at 20 kHz ripple,ENGINEERING_REQUIRED,Simulation and power-stage calculation
+L2,Grid-side LCL inductor,1,Custom or catalog part,75 uH plus emulator/grid impedance; saturation at least 30 A,ENGINEERING_REQUIRED,Simulation and power-stage calculation
+CDC,DC-link capacitor bank,3,KEMET ALS31A103KE100,"30 mF nominal/24 mF at -20%; 100 VDC; 30.3 Arms aggregate 100 Hz rating",REFERENCE_CANDIDATE,KEMET part specification and passive/protection calculation
+CF,LCL capacitor,1,KEMET C4AQUBW5200A3MJ,"20 uF 5%; 1300 VDC; 18.3 Arms at 10 kHz/70 C",REFERENCE_CANDIDATE,KEMET part specification and LCL calculation
+RD,LCL damping resistor,1,TE HSC100R56J,"0.56 ohm 5%; 100 W chassis mount with specified heatsink",REFERENCE_CANDIDATE,TE product specification and loss allocation
+RPRE,Precharge resistor,1,TE HSC10047RJ,"47 ohm 5%; 100 W chassis mount; 62.0 W maximum initial load with specified heatsink",REFERENCE_CANDIDATE,TE product specification and precharge calculation
+K1,Main DC contactor,1,Albright SW80B,"96 VDC with blowouts; 100 A thermal; continuous 12 V coil and auxiliary contact required",CONFIGURATION_PENDING,Albright SW80 datasheet
+F1,PV/DC fuse,1,Littelfuse JLLN030.T,"30 A; 160 VDC; 50 kA DC interrupt rating",COORDINATION_PENDING,Littelfuse JLLN datasheet
+TVS1-TVS4,Switch-node clamp,4,TBD,Selected after double-pulse overshoot measurement,MEASUREMENT_DEPENDENT,Single-leg commissioning plan
+J1-Jn,Power connectors,TBD,Anderson SB50 with 8 AWG silver contacts,"600 V; 50 A CSA rating; keyed colors and enclosure boots assigned during layout",REFERENCE_CANDIDATE,Anderson SB50 datasheet
+U9-U12,Voltage sensing front end,4,TBD differential or isolated amplifier,"3.3 V ADC-compatible output; reinforced isolation where required; settled within 200 ns acquisition",ENGINEERING_REQUIRED,Sensing calculation and connectivity validation
+U13,Heatsink temperature sensor,1,TMP235 or equivalent,"-20 to 125 deg C range; buffered 10 mV/degC interface",REFERENCE_CANDIDATE,Sensing calculation
+UEN1-UEN8,PWM hardware interlock gate,3,"1 x SN74HCS21QPWRQ1 plus 2 x SN74LVC08AQPWRG4Q1","Four safety terms generate shared enable; eight independent PWM channels are AND-gated",REFERENCE_CANDIDATE,TI logic datasheets and gate-drive calculation
+UTRIP,Hardware trip latch and combiner,1,SN74HCS02QPWRQ1,"Asynchronous NOR latch combines PV DC and grid overcurrent plus emergency stop; manual reset only",REFERENCE_CANDIDATE,TI logic datasheet and protection architecture
+UBIAS,Gate-bias supervisor,1,TPS3700QDSERQ1,"Adjustable 18 V window monitor; open-drain outputs qualify the 12 V gate rail",REFERENCE_CANDIDATE,TI TPS3700-Q1 datasheet
+URS485,Isolated RS-485 transceiver,1,ISO1410 or equivalent,"3.3 V logic; galvanically isolated bus; 9600 baud half duplex",REFERENCE_CANDIDATE,SunSpec RTU architecture
+KPRE,Precharge relay,1,TBD,"At least 80 VDC contact rating and 12 V coil; coordinated with 47 ohm resistor",SELECTION_PENDING,Precharge calculation
+KAC,AC grid contactor,1,Omron G9KA-1A1B-E DC12,"Normally-open main contact; 12 V coil; mirror auxiliary contact; coil hold-voltage reduction required",REFERENCE_CANDIDATE,Omron G9KA datasheet
+QKPRE/QK1/QKAC,Relay coil low-side MOSFET,3,PMV37ENEA,"60 V logic-level N-channel; final coil current and thermal check required",REFERENCE_CANDIDATE,Nexperia product data
+DKPRE/DK1/DKAC,Relay flyback diode,3,MURS120T3G,"200 V 1 A ultrafast rectifier; 40 A surge",REFERENCE_CANDIDATE,onsemi datasheet
+RG1-RG8,Gate resistor,8,TBD,"Initial 5 to 15 ohm range with diode tuning footprint",TUNING_REQUIRED,Double-pulse test plan
+RGS1-RGS8,Gate-source pulldown,8,10 kohm,"Maintains MOSFET off during reset and disconnected controller",REFERENCE_VALUE,Gate-driver interlock architecture
+CB1-CB4,Bootstrap capacitor,4,100 nF 5% 50 V C0G,"Worst-case bootstrap voltage 9.65 V at 98% duty; place at HB-HS pins",REFERENCE_VALUE,UCC27211A datasheet and gate-drive calculation
+CIN,PV input capacitor bank,1,TBD,"80 V minimum; ripple current and local commutation loop verified",ENGINEERING_REQUIRED,Power-stage layout
+JCTRL,Controller mezzanine connector,1,TBD,"Carries eight PWM eight ADC safety relay and serial signals with assigned returns",MECHANICAL_PENDING,Connectivity netlist and LaunchPad pin allocation
+JCOM,RS-485 connector,1,TBD,"A B and isolated reference; termination footprint at bus end",MECHANICAL_PENDING,Communications architecture
+JBIAS,Bias and auxiliary power connector,1,TBD,"12 V gate drive 12 V relay 5 V isolated sensor and 3.3 V rails",MECHANICAL_PENDING,Connectivity netlist

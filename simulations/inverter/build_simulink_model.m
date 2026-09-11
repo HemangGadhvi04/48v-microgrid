@@ -1,39 +1,161 @@
 %% Build & Configure Simulink Model for Single-Phase H-Bridge Inverter
 % Project: 48V Open-Source Microgrid Research Platform
-% Subsystem: H-Bridge Inverter with Unipolar SPWM and LC Filter
+% Subsystem: Ideal H-Bridge with Unipolar SPWM and damped LC filter
 
-% 1. Load Parameters into Base Workspace
+% Load parameters into the MATLAB/base workspace used by Simulink blocks.
 inverter_params;
 
-model_name = 'hbridge_inverter_lc';
+model_name = 'hbridge_inverter_lc_open_loop';
 
-% Check if model already exists or open new
 if bdIsLoaded(model_name)
     close_system(model_name, 0);
 end
 
 if exist([model_name '.slx'], 'file')
-    fprintf('Existing model %s.slx found. Opening...\n', model_name);
+    fprintf('Existing generated model %s.slx found. Opening without overwriting.\n', model_name);
     open_system(model_name);
-else
-    fprintf('Creating new Simulink system: %s...\n', model_name);
-    new_system(model_name);
-    open_system(model_name);
-    
-    % Configure Model Solver Settings
-    set_param(model_name, 'SolverType', 'Variable-step');
-    set_param(model_name, 'Solver', 'ode23tb');
-    set_param(model_name, 'MaxStep', num2str(T_step));
-    set_param(model_name, 'StopTime', num2str(T_sim));
-    
-    fprintf('Model configured with ode23tb solver, max step = %e s, stop time = %.2f s.\n', T_step, T_sim);
-    fprintf('You can now assemble the Simscape Electrical components:\n');
-    fprintf('  - DC Voltage Source (Vdc = 48V)\n');
-    fprintf('  - Full-Bridge Inverter (MOSFET/IGBT H-Bridge)\n');
-    fprintf('  - Series Inductor (Lf = 100uH, RLf = 15mOhm)\n');
-    fprintf('  - Shunt Capacitor Branch (Cf = 47uF + Rd = 0.5 Ohm)\n');
-    fprintf('  - Parallel Resistive Load (Rload = 1.665 Ohm, 500W)\n');
-    fprintf('  - SPWM Generator Subsystem (50Hz Sine vs 20kHz Carrier)\n');
-    
-    save_system(model_name);
+    return;
 end
+
+fprintf('Creating Simulink system: %s...\n', model_name);
+new_system(model_name);
+open_system(model_name);
+
+%% Model solver configuration
+set_param(model_name, 'SolverType', 'Fixed-step');
+set_param(model_name, 'Solver', 'ode3');
+set_param(model_name, 'FixedStep', num2str(T_step));
+set_param(model_name, 'StopTime', num2str(T_sim));
+set_param(model_name, 'ReturnWorkspaceOutputs', 'on');
+
+%% Source and carrier generation
+add_block('simulink/Sources/Sine Wave', [model_name '/50 Hz Reference'], ...
+    'Amplitude', 'm_a', ...
+    'Bias', '0', ...
+    'Frequency', 'omega_0', ...
+    'Phase', '0', ...
+    'SampleTime', '0', ...
+    'Position', [60 90 145 125]);
+
+add_block('simulink/Sources/Repeating Sequence', [model_name '/20 kHz Triangle Carrier'], ...
+    'rep_seq_t', 'carrier_time', ...
+    'rep_seq_y', 'carrier_values', ...
+    'Position', [60 185 145 225]);
+
+%% Unipolar SPWM generator subsystem
+spwm_path = [model_name '/Unipolar SPWM Generator'];
+add_block('built-in/Subsystem', spwm_path, 'Position', [215 105 405 220]);
+
+add_block('simulink/Sources/In1', [spwm_path '/v_ref_pu'], 'Position', [40 45 70 59]);
+add_block('simulink/Sources/In1', [spwm_path '/carrier'], 'Position', [40 125 70 139]);
+add_block('simulink/Math Operations/Gain', [spwm_path '/Invert Reference'], ...
+    'Gain', '-1', ...
+    'Position', [115 72 155 108]);
+add_block('simulink/Logic and Bit Operations/Relational Operator', [spwm_path '/Leg A Comparator'], ...
+    'Operator', '>=', ...
+    'Position', [205 37 250 68]);
+add_block('simulink/Logic and Bit Operations/Relational Operator', [spwm_path '/Leg B Comparator'], ...
+    'Operator', '>=', ...
+    'Position', [205 108 250 139]);
+add_block('simulink/Sinks/Out1', [spwm_path '/gate_A'], 'Position', [310 45 340 59]);
+add_block('simulink/Sinks/Out1', [spwm_path '/gate_B'], 'Position', [310 116 340 130]);
+
+add_line(spwm_path, 'v_ref_pu/1', 'Leg A Comparator/1');
+add_line(spwm_path, 'carrier/1', 'Leg A Comparator/2');
+add_line(spwm_path, 'v_ref_pu/1', 'Invert Reference/1');
+add_line(spwm_path, 'Invert Reference/1', 'Leg B Comparator/1');
+add_line(spwm_path, 'carrier/1', 'Leg B Comparator/2');
+add_line(spwm_path, 'Leg A Comparator/1', 'gate_A/1');
+add_line(spwm_path, 'Leg B Comparator/1', 'gate_B/1');
+
+%% Ideal H-bridge switching equation
+% Unipolar H-bridge line voltage: v_inv = Vdc * (gate_A - gate_B).
+add_block('simulink/Math Operations/Sum', [model_name '/gate_A_minus_gate_B'], ...
+    'Inputs', '+-', ...
+    'Position', [475 125 505 195]);
+add_block('simulink/Signal Attributes/Data Type Conversion', [model_name '/gate_A double'], ...
+    'OutDataTypeStr', 'double', ...
+    'Position', [425 125 455 155]);
+add_block('simulink/Signal Attributes/Data Type Conversion', [model_name '/gate_B double'], ...
+    'OutDataTypeStr', 'double', ...
+    'Position', [425 165 455 195]);
+add_block('simulink/Math Operations/Gain', [model_name '/Ideal H-Bridge Voltage'], ...
+    'Gain', 'Vdc', ...
+    'Position', [560 145 650 175]);
+
+%% Damped LC filter and resistive load measurement
+add_block('simulink/Continuous/Transfer Fcn', [model_name '/Damped LC Output Filter'], ...
+    'Numerator', 'lc_tf_num', ...
+    'Denominator', 'lc_tf_den', ...
+    'Position', [715 142 845 178]);
+add_block('simulink/Math Operations/Gain', [model_name '/Load Current'], ...
+    'Gain', '1/R_load', ...
+    'Position', [905 145 985 175]);
+
+%% Logging and visualization
+add_block('simulink/Sinks/To Workspace', [model_name '/log_v_ref_pu'], ...
+    'VariableName', 'v_ref_pu', ...
+    'SaveFormat', 'Timeseries', ...
+    'Position', [215 45 305 75]);
+add_block('simulink/Sinks/To Workspace', [model_name '/log_carrier'], ...
+    'VariableName', 'carrier', ...
+    'SaveFormat', 'Timeseries', ...
+    'Position', [215 245 305 275]);
+add_block('simulink/Sinks/To Workspace', [model_name '/log_gate_A'], ...
+    'VariableName', 'gate_A', ...
+    'SaveFormat', 'Timeseries', ...
+    'Position', [475 50 560 80]);
+add_block('simulink/Sinks/To Workspace', [model_name '/log_gate_B'], ...
+    'VariableName', 'gate_B', ...
+    'SaveFormat', 'Timeseries', ...
+    'Position', [475 235 560 265]);
+add_block('simulink/Sinks/To Workspace', [model_name '/log_v_inv'], ...
+    'VariableName', 'v_inv', ...
+    'SaveFormat', 'Timeseries', ...
+    'Position', [715 75 805 105]);
+add_block('simulink/Sinks/To Workspace', [model_name '/log_v_out'], ...
+    'VariableName', 'v_out', ...
+    'SaveFormat', 'Timeseries', ...
+    'Position', [905 75 995 105]);
+add_block('simulink/Sinks/To Workspace', [model_name '/log_i_load'], ...
+    'VariableName', 'i_load', ...
+    'SaveFormat', 'Timeseries', ...
+    'Position', [1045 145 1135 175]);
+
+add_block('simulink/Signal Routing/Mux', [model_name '/Waveform Mux'], ...
+    'Inputs', '3', ...
+    'Position', [1050 245 1055 335]);
+add_block('simulink/Sinks/Scope', [model_name '/Waveform Scope'], ...
+    'Position', [1115 260 1160 320]);
+
+%% Top-level signal routing
+add_line(model_name, '50 Hz Reference/1', 'Unipolar SPWM Generator/1');
+add_line(model_name, '20 kHz Triangle Carrier/1', 'Unipolar SPWM Generator/2');
+add_line(model_name, '50 Hz Reference/1', 'log_v_ref_pu/1');
+add_line(model_name, '20 kHz Triangle Carrier/1', 'log_carrier/1');
+
+add_line(model_name, 'Unipolar SPWM Generator/1', 'gate_A double/1');
+add_line(model_name, 'Unipolar SPWM Generator/2', 'gate_B double/1');
+add_line(model_name, 'gate_A double/1', 'gate_A_minus_gate_B/1');
+add_line(model_name, 'gate_B double/1', 'gate_A_minus_gate_B/2');
+add_line(model_name, 'Unipolar SPWM Generator/1', 'log_gate_A/1');
+add_line(model_name, 'Unipolar SPWM Generator/2', 'log_gate_B/1');
+
+add_line(model_name, 'gate_A_minus_gate_B/1', 'Ideal H-Bridge Voltage/1');
+add_line(model_name, 'Ideal H-Bridge Voltage/1', 'Damped LC Output Filter/1');
+add_line(model_name, 'Ideal H-Bridge Voltage/1', 'log_v_inv/1');
+add_line(model_name, 'Damped LC Output Filter/1', 'Load Current/1');
+add_line(model_name, 'Damped LC Output Filter/1', 'log_v_out/1');
+add_line(model_name, 'Load Current/1', 'log_i_load/1');
+
+add_line(model_name, 'Ideal H-Bridge Voltage/1', 'Waveform Mux/1');
+add_line(model_name, 'Damped LC Output Filter/1', 'Waveform Mux/2');
+add_line(model_name, 'Load Current/1', 'Waveform Mux/3');
+add_line(model_name, 'Waveform Mux/1', 'Waveform Scope/1');
+
+Simulink.BlockDiagram.arrangeSystem(model_name);
+save_system(model_name);
+
+fprintf('Model saved: %s.slx\n', model_name);
+fprintf('Configured fixed-step ode3 solver, step = %e s, stop time = %.2f s.\n', T_step, T_sim);
+fprintf('Built subsystems: Unipolar SPWM Generator, Ideal H-Bridge Voltage, Damped LC Output Filter.\n');

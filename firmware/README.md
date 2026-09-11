@@ -13,6 +13,36 @@ This directory contains embedded C/C++ firmware projects developed in Code Compo
   - `CLA (Control Law Accelerator)`: Offloading the inner current control loop and SOGI-PLL math to execute concurrently with Core 0
 
 ## Submodules
-- `firmware/buck_boost_ctrl/`: Digital PI voltage and average current mode control
-- `firmware/inverter_ctrl/`: Single-phase SPWM, SOGI-PLL, and Proportional-Resonant (PR) current controller
-- `firmware/modbus_sunspec/`: SunSpec standard Modbus slave map implementation
+- `firmware/control_core/`: Portable C control and protection foundation with host tests
+- `firmware/application/`: Integrated 20 kHz ADC-to-control-to-PWM and telemetry application
+- `firmware/c2000_port/`: Frozen LaunchPad pin allocation and host-tested ISR
+  boundary for coherent ADC sets, outputs, timing, watchdog, hardware trip, and
+  complete Modbus frames
+- `firmware/buck_boost_ctrl/`: Future C2000 peripheral binding for the DC-DC converter
+- `firmware/inverter_ctrl/`: Future C2000 peripheral binding for SPWM, SOGI-PLL, and PR control
+- `firmware/modbus_sunspec/`: Allocation-free embedded SunSpec 1/101 register image and Modbus RTU slave
+
+## Implemented control core
+
+The portable core currently includes bounded PI control with conditional
+integration, serializable P&O MPPT state, cascaded PV-voltage and inductor-current
+control for the four-switch buck-boost stage, duty-cycle limits, and a latched
+supervisor for precharge, PLL authorization, PWM enable, emergency stop,
+overvoltage, undervoltage, overcurrent, overtemperature, and precharge timeout.
+
+Run its host-side checks without CCS or C2000Ware:
+
+```sh
+make -C firmware/control_core test
+make -C firmware/modbus_sunspec test
+make -C firmware/application test
+```
+
+The core contains no dynamic allocation or operating-system dependency. The
+next firmware step is to bind these functions to ePWM, ADC SOC, Trip Zone, and
+SCI drivers after the exact C2000 board and pin allocation are fixed.
+
+The embedded Modbus module accepts complete RTU frames from an SCI receive
+buffer and returns a bounded response for transmission. It contains no UART or
+RS-485 direction-control assumptions, allowing the same protocol code to remain
+host-testable while the C2000 port owns peripheral timing.

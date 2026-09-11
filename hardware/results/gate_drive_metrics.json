@@ -1,0 +1,21 @@
+{
+  "switching_period_s": 5e-05,
+  "maximum_high_side_on_time_s": 4.9e-05,
+  "bootstrap_required_charge_c": 1.2388e-07,
+  "bootstrap_minimum_capacitance_f": 9.499999999999999e-08,
+  "bootstrap_worst_case_droop_v": 1.304,
+  "bootstrap_minimum_voltage_v": 9.645999999999999,
+  "bootstrap_uvlo_margin_v": 1.7459999999999987,
+  "gate_charge_power_per_half_bridge_w": 0.05664,
+  "dead_time_after_worst_driver_delay_s": 8.299999999999999e-08,
+  "maximum_hardware_disable_latency_s": 8.500000000000001e-08,
+  "integrated_bootstrap_diode": true,
+  "interlock": {
+    "safety_and": "SN74HCS21QPWRQ1",
+    "pwm_and": "SN74LVC08AQPWRG4Q1",
+    "trip_latch_logic": "SN74HCS02QPWRQ1",
+    "bias_supervisor": "TPS3700QDSERQ1",
+    "relay_driver": "PMV37ENEA",
+    "relay_flyback_diode": "MURS120T3G"
+  }
+}

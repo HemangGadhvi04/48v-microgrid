@@ -1,0 +1,7 @@
+{
+  "influxdb": {
+    "url": "http://localhost:8086",
+    "org": "microgrid-lab",
+    "bucket": "microgrid_telemetry"
+  }
+}

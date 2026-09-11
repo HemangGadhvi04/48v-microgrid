@@ -1,0 +1,31 @@
+{
+  "upstream": "https://github.com/TexasInstruments/c2000ware-core-sdk",
+  "revision": "e5698c666d9ff587940d249213cbbb328a3bcd66",
+  "release_in_headers": "26.01.00.00",
+  "device": "f2837xd",
+  "apis": {
+    "ADC_getInterruptStatus": "bool (uint32_t, ADC_IntNumber)",
+    "ADC_readResult": "uint16_t (uint32_t, ADC_SOCNumber)",
+    "ADC_clearInterruptStatus": "void (uint32_t, ADC_IntNumber)",
+    "ADC_getInterruptOverflowStatus": "bool (uint32_t, ADC_IntNumber)",
+    "ADC_clearInterruptOverflowStatus": "void (uint32_t, ADC_IntNumber)",
+    "EPWM_setCounterCompareValue": "void (uint32_t, EPWM_CounterCompareModule, uint16_t)",
+    "EPWM_clearTripZoneFlag": "void (uint32_t, uint16_t)",
+    "EPWM_forceTripZoneEvent": "void (uint32_t, uint16_t)",
+    "GPIO_readPin": "uint32_t (uint32_t)",
+    "GPIO_writePin": "void (uint32_t, uint32_t)",
+    "CPUTimer_getTimerCount": "uint32_t (uint32_t)",
+    "SysCtl_serviceWatchdog": "void (void)",
+    "Interrupt_clearACKGroup": "void (uint16_t)",
+    "Interrupt_register": "void (uint32_t, void (*)(void))",
+    "Interrupt_enable": "void (uint32_t)"
+  },
+  "constants": [
+    "ADCA_BASE", "ADCARESULT_BASE", "ADCBRESULT_BASE", "ADCCRESULT_BASE",
+    "ADC_INT_NUMBER1", "ADC_SOC_NUMBER0", "ADC_SOC_NUMBER1",
+    "ADC_SOC_NUMBER2", "ADC_SOC_NUMBER3", "EPWM1_BASE", "EPWM2_BASE",
+    "EPWM3_BASE", "EPWM4_BASE", "EPWM_COUNTER_COMPARE_A",
+    "EPWM_TZ_FLAG_OST", "EPWM_TZ_FORCE_EVENT_OST", "CPUTIMER0_BASE",
+    "INTERRUPT_ACK_GROUP1", "INT_ADCA1"
+  ]
+}

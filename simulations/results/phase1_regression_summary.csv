@@ -1,0 +1,9 @@
+stage,passed,elapsed_s,message
+Open-loop inverter,1,53.7377067916667,PASS
+Closed-loop islanded inverter,1,46.5811640416667,PASS
+LCL grid interface,1,24.6543081666667,PASS
+SOGI-PLL,1,6.458088,PASS
+Grid-following inverter,1,13.4545684166667,PASS
+PV source,1,2.86630633333333,PASS
+P&O MPPT,1,2.52871758333333,PASS
+Coupled solar-to-grid,1,52.1718804166667,PASS

@@ -1,0 +1,3 @@
+names,passed,elapsed_s,message
+Battery equivalent circuit,1,4.62932366666667,PASS
+Droop/islanding/reconnection,1,6.02516745833333,PASS

@@ -1,0 +1,11 @@
+{
+  "component_count": 75,
+  "pin_count": 291,
+  "net_count": 86,
+  "adc_channels": 8,
+  "mosfet_gate_chains": 8,
+  "hardware_interlock_channels": 8,
+  "relay_drivers": 3,
+  "bom_line_items": 32,
+  "checks_passed": true
+}

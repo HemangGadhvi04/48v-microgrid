@@ -19,18 +19,7 @@ function [I, P] = pv_single_diode(V, G, T_degC, params)
 
 %% 1. Default Parameters at Standard Test Conditions (STC: 1000 W/m^2, 25°C)
 if nargin < 4 || isempty(params)
-    % Scaled array to feed 48V DC bus (~500W peak)
-    % Example: 2 strings of panels or a 72-cell module scaled for ~500W
-    params.I_sc_stc = 10.5;      % Short-circuit current at STC [A]
-    params.V_oc_stc = 58.0;      % Open-circuit voltage at STC [V]
-    params.I_mp_stc = 9.8;       % Maximum power current at STC [A]
-    params.V_mp_stc = 51.0;      % Maximum power voltage at STC [V]
-    params.alpha_isc = 0.0005;   % Temp coefficient of I_sc [A/°C]
-    params.beta_voc  = -0.0032;  % Temp coefficient of V_oc [V/°C]
-    params.N_s       = 96;       % Total series cells
-    params.n_diode   = 1.25;     % Diode ideality factor
-    params.R_s       = 0.28;     % Series resistance [Ohms]
-    params.R_sh      = 450.0;    % Shunt resistance [Ohms]
+    params = pv_default_params();
 end
 
 %% 2. Physical Constants
@@ -48,8 +37,7 @@ I_ph = (G / 1000.0) * (params.I_sc_stc + params.alpha_isc * delta_T);
 
 % Reverse saturation current I_0
 % Bandgap energy of silicon Eg(T)
-Eg_0 = 1.166; % [eV]
-Eg   = 1.17 - (4.73e-4 * T_k^2) / (T_k + 636);
+Eg_0 = 1.121; % silicon bandgap reference [eV]
 I_0_stc = (params.I_sc_stc - (params.V_oc_stc / params.R_sh)) / ...
           (exp(params.V_oc_stc / ((params.N_s * params.n_diode * k * T_stc) / q)) - 1);
 I_0     = I_0_stc * ((T_k / T_stc)^3) * exp((q * Eg_0 / (params.n_diode * k)) * (1/T_stc - 1/T_k));
@@ -70,8 +58,8 @@ for idx = 1:numel(V)
         arg_exp = (v_cell + i_curr * params.R_s) / V_t;
         
         % Bound exponential argument to prevent numerical overflow
-        if arg_exp > 700
-            arg_exp = 700;
+        if arg_exp > 100
+            arg_exp = 100;
         end
         
         exp_val = exp(arg_exp);

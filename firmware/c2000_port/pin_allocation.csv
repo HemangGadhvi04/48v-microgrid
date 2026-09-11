@@ -1,0 +1,28 @@
+function,direction,peripheral,gpio_or_channel,launchpad_header,pin,notes
+dc_dc_input_high,output,ePWM1A,GPIO0,J4,40,Complementary pair with hardware dead band
+dc_dc_input_low,output,ePWM1B,GPIO1,J4,39,Complementary pair with hardware dead band
+dc_dc_output_high,output,ePWM2A,GPIO2,J4,38,Complementary pair with hardware dead band
+dc_dc_output_low,output,ePWM2B,GPIO3,J4,37,Complementary pair with hardware dead band
+inverter_leg_a_high,output,ePWM3A,GPIO4,J4,36,Complementary pair with hardware dead band
+inverter_leg_a_low,output,ePWM3B,GPIO5,J4,35,Complementary pair with hardware dead band
+inverter_leg_b_high,output,ePWM4A,GPIO6,J8,80,Complementary pair with hardware dead band
+inverter_leg_b_low,output,ePWM4B,GPIO7,J8,79,Complementary pair with hardware dead band
+trip_latch_n,input,INPUTXBAR1,GPIO24,J4,34,Active low asynchronous one-shot trip for all ePWM modules
+estop_n,input,GPIO,GPIO25,J4,33,Active low and also included in external hardware enable chain
+precharge_relay,output,GPIO,GPIO10,J4,32,Drive through interlocked low-side output stage
+main_contactor,output,GPIO,GPIO11,J4,31,Drive through interlocked low-side output stage
+grid_breaker,output,GPIO,GPIO67,J1,5,Normally open AC breaker command
+pwm_arm,output,GPIO,GPIO111,J1,6,Hardware gate-enable authorization
+bias_power_good,input,GPIO,GPIO32,J1,2,Active high gate-bias monitor
+rs485_rx,input,SCIB_RX,GPIO19,J1,3,Isolated transceiver receive
+rs485_tx,output,SCIB_TX,GPIO18,J1,4,Isolated transceiver transmit
+rs485_driver_enable,output,GPIO,GPIO22,J1,8,Active high isolated transceiver direction
+isr_timing_marker,output,GPIO,GPIO60,J1,7,Oscilloscope execution-time marker
+pv_voltage,input,ADCIN14,ADCIN14,J3,23,12-bit single-ended
+dc_bus_voltage,input,ADCINC3,ADCINC3,J3,24,12-bit single-ended
+pv_current,input,ADCINB3,ADCINB3,J3,25,12-bit single-ended centered sensor
+dc_inductor_current,input,ADCINA3,ADCINA3,J3,26,12-bit single-ended centered sensor
+grid_voltage,input,ADCINC2,ADCINC2,J3,27,Microgrid-bus centered sensor
+utility_voltage,input,ADCINB2,ADCINB2,J3,28,Utility-side centered sensor
+grid_current,input,ADCINA2,ADCINA2,J3,29,12-bit single-ended centered sensor
+heatsink_temperature,input,ADCINA0,ADCINA0,J3,30,12-bit single-ended

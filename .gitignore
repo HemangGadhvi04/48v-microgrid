@@ -13,6 +13,8 @@ slprj/
 codegen/
 *.m~
 sfun_*.c
+*waveforms.csv
+*.mat
 
 # Python
 __pycache__/
@@ -37,3 +39,6 @@ _autosave-*
 # IDEs
 .idea/
 .vscode/
+
+# Host firmware builds
+firmware/**/build/

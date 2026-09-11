@@ -1,0 +1,335 @@
+reference,pin,net,domain,description
+JPV,1,PV_IN+,PV,PV source positive
+JPV,2,PGND,PV,PV source return
+F1,1,PV_IN+,PV,PV input fuse
+F1,2,PV_FUSED+,PV,Fused PV rail
+CIN,1,PV_FUSED+,PV,Input capacitor positive
+CIN,2,PGND,PV,Input capacitor return
+U6,IP+,PV_FUSED+,PV,PV current sensor input
+U6,IP-,PV_SENSED+,PV,PV current sensor output
+U6,VOUT,ADC_PV_I,ANALOG,PV current measurement
+U6,OC,OC_PV_N,SAFETY,PV overcurrent alert
+Q1,D,PV_SENSED+,POWER,DC converter input high side
+Q1,S,SW_PV,POWER,DC converter input switch node
+Q1,G,GATE_Q1,GATE,High-side MOSFET gate
+Q2,D,SW_PV,POWER,DC converter input low side
+Q2,S,PGND,POWER,DC converter return
+Q2,G,GATE_Q2,GATE,Low-side MOSFET gate
+LDC,1,SW_PV,POWER,DC converter inductor
+LDC,2,LDC_RAW,POWER,DC converter inductor
+U7,IP+,LDC_RAW,POWER,DC inductor current sensor
+U7,IP-,SW_DC,POWER,DC inductor current sensor
+U7,VOUT,ADC_IL_DC,ANALOG,DC inductor current measurement
+U7,OC,OC_DC_N,SAFETY,DC overcurrent alert
+Q3,D,DC48+,POWER,DC converter output high side
+Q3,S,SW_DC,POWER,DC converter output switch node
+Q3,G,GATE_Q3,GATE,High-side MOSFET gate
+Q4,D,SW_DC,POWER,DC converter output low side
+Q4,S,PGND,POWER,DC converter return
+Q4,G,GATE_Q4,GATE,Low-side MOSFET gate
+CDC,1,DC48+,DC_LINK,DC link capacitor bank
+CDC,2,PGND,DC_LINK,DC link capacitor return
+JDC,1,DC_SOURCE+,DC_LINK,External battery or DC source
+JDC,2,PGND,DC_LINK,External source return
+KPRE,COM,DC_SOURCE+,DC_LINK,Precharge relay input
+KPRE,NO,PRECHARGE_IN,DC_LINK,Precharge relay output
+RPRE,1,PRECHARGE_IN,DC_LINK,Precharge resistor
+RPRE,2,DC48+,DC_LINK,Precharge resistor output
+K1,COM,DC_SOURCE+,DC_LINK,Main DC contactor input
+K1,NO,DC48+,DC_LINK,Main DC contactor output
+Q5,D,DC48+,POWER,Inverter leg A high side
+Q5,S,SW_A,POWER,Inverter leg A switch node
+Q5,G,GATE_Q5,GATE,Inverter gate
+Q6,D,SW_A,POWER,Inverter leg A low side
+Q6,S,PGND,POWER,Inverter return
+Q6,G,GATE_Q6,GATE,Inverter gate
+Q7,D,DC48+,POWER,Inverter leg B high side
+Q7,S,AC_RETURN,POWER,Inverter leg B switch node and AC return
+Q7,G,GATE_Q7,GATE,Inverter gate
+Q8,D,AC_RETURN,POWER,Inverter leg B low side
+Q8,S,PGND,POWER,Inverter return
+Q8,G,GATE_Q8,GATE,Inverter gate
+L1,1,SW_A,AC,Inverter-side LCL inductor
+L1,2,AC_INV,AC,Filtered inverter node
+CF,1,AC_INV,AC,LCL shunt capacitor
+CF,2,CF_DAMP,AC,LCL shunt capacitor
+RD,1,CF_DAMP,AC,LCL damping resistor
+RD,2,AC_RETURN,AC,LCL damping return
+L2,1,AC_INV,AC,Grid-side LCL inductor
+L2,2,L2_RAW,AC,Grid-side LCL inductor
+U8,IP+,L2_RAW,AC,Grid current sensor input
+U8,IP-,AC_PCC,AC,Grid current sensor output
+U8,VOUT,ADC_GRID_I,ANALOG,Grid current measurement
+U8,OC,OC_GRID_N,SAFETY,Grid overcurrent alert
+KAC,COM,AC_PCC,AC,Microgrid side of AC breaker
+KAC,NO,UTILITY_AC,AC,Utility emulator side of AC breaker
+JAC,1,UTILITY_AC,AC,Isolated grid emulator line
+JAC,2,AC_RETURN,AC,Isolated grid emulator return
+U9,IN+,PV_SENSED+,ANALOG,PV voltage front end
+U9,IN-,PGND,ANALOG,PV voltage reference
+U9,OUT,ADC_PV_V,ANALOG,PV voltage measurement
+U10,IN+,DC48+,ANALOG,DC bus voltage front end
+U10,IN-,PGND,ANALOG,DC bus voltage reference
+U10,OUT,ADC_VDC,ANALOG,DC bus voltage measurement
+U11,IN+,AC_INV,ANALOG,Microgrid bus voltage front end
+U11,IN-,AC_RETURN,ANALOG,Microgrid bus reference
+U11,OUT,ADC_GRID_V,ANALOG,Microgrid voltage measurement
+U12,IN+,UTILITY_AC,ANALOG,Utility-side voltage front end
+U12,IN-,AC_RETURN,ANALOG,Utility voltage reference
+U12,OUT,ADC_UTILITY_V,ANALOG,Utility voltage measurement
+U13,SENSE,HEATSINK,THERMAL,Heatsink temperature sensor
+U13,OUT,ADC_TEMP,ANALOG,Temperature measurement
+UTRIP,IN1_N,OC_PV_N,SAFETY,PV overcurrent input
+UTRIP,IN2_N,OC_DC_N,SAFETY,DC overcurrent input
+UTRIP,IN3_N,OC_GRID_N,SAFETY,Grid overcurrent input
+UTRIP,IN4_N,ESTOP_N,SAFETY,Emergency stop input
+UTRIP,OUT_N,TRIP_LATCH_N,SAFETY,Latched trip output
+U1,HI,PWM1A,DIGITAL,Input-leg high command
+U1,LI,PWM1B,DIGITAL,Input-leg low command
+U1,HO,DRV_Q1,GATE,Input-leg high gate drive
+U1,LO,DRV_Q2,GATE,Input-leg low gate drive
+U1,HS,SW_PV,GATE,Input-leg floating return
+U2,HI,PWM2A,DIGITAL,Output-leg high command
+U2,LI,PWM2B,DIGITAL,Output-leg low command
+U2,HO,DRV_Q3,GATE,Output-leg high gate drive
+U2,LO,DRV_Q4,GATE,Output-leg low gate drive
+U2,HS,SW_DC,GATE,Output-leg floating return
+U3,HI,PWM3A,DIGITAL,Inverter A high command
+U3,LI,PWM3B,DIGITAL,Inverter A low command
+U3,HO,DRV_Q5,GATE,Inverter A high gate drive
+U3,LO,DRV_Q6,GATE,Inverter A low gate drive
+U3,HS,SW_A,GATE,Inverter A floating return
+U4,HI,PWM4A,DIGITAL,Inverter B high command
+U4,LI,PWM4B,DIGITAL,Inverter B low command
+U4,HO,DRV_Q7,GATE,Inverter B high gate drive
+U4,LO,DRV_Q8,GATE,Inverter B low gate drive
+U4,HS,AC_RETURN,GATE,Inverter B floating return
+RG1,1,DRV_Q1,GATE,Series gate resistor input
+RG1,2,GATE_Q1,GATE,Series gate resistor output
+RGS1,1,GATE_Q1,GATE,Gate-source pulldown
+RGS1,2,SW_PV,GATE,Gate-source pulldown return
+RG2,1,DRV_Q2,GATE,Series gate resistor input
+RG2,2,GATE_Q2,GATE,Series gate resistor output
+RGS2,1,GATE_Q2,GATE,Gate-source pulldown
+RGS2,2,PGND,GATE,Gate-source pulldown return
+RG3,1,DRV_Q3,GATE,Series gate resistor input
+RG3,2,GATE_Q3,GATE,Series gate resistor output
+RGS3,1,GATE_Q3,GATE,Gate-source pulldown
+RGS3,2,SW_DC,GATE,Gate-source pulldown return
+RG4,1,DRV_Q4,GATE,Series gate resistor input
+RG4,2,GATE_Q4,GATE,Series gate resistor output
+RGS4,1,GATE_Q4,GATE,Gate-source pulldown
+RGS4,2,PGND,GATE,Gate-source pulldown return
+RG5,1,DRV_Q5,GATE,Series gate resistor input
+RG5,2,GATE_Q5,GATE,Series gate resistor output
+RGS5,1,GATE_Q5,GATE,Gate-source pulldown
+RGS5,2,SW_A,GATE,Gate-source pulldown return
+RG6,1,DRV_Q6,GATE,Series gate resistor input
+RG6,2,GATE_Q6,GATE,Series gate resistor output
+RGS6,1,GATE_Q6,GATE,Gate-source pulldown
+RGS6,2,PGND,GATE,Gate-source pulldown return
+RG7,1,DRV_Q7,GATE,Series gate resistor input
+RG7,2,GATE_Q7,GATE,Series gate resistor output
+RGS7,1,GATE_Q7,GATE,Gate-source pulldown
+RGS7,2,AC_RETURN,GATE,Gate-source pulldown return
+RG8,1,DRV_Q8,GATE,Series gate resistor input
+RG8,2,GATE_Q8,GATE,Series gate resistor output
+RGS8,1,GATE_Q8,GATE,Gate-source pulldown
+RGS8,2,PGND,GATE,Gate-source pulldown return
+JCTRL,PWM1A,PWM1A_RAW,DIGITAL,C2000 PWM output
+JCTRL,PWM1B,PWM1B_RAW,DIGITAL,C2000 PWM output
+JCTRL,PWM2A,PWM2A_RAW,DIGITAL,C2000 PWM output
+JCTRL,PWM2B,PWM2B_RAW,DIGITAL,C2000 PWM output
+JCTRL,PWM3A,PWM3A_RAW,DIGITAL,C2000 PWM output
+JCTRL,PWM3B,PWM3B_RAW,DIGITAL,C2000 PWM output
+JCTRL,PWM4A,PWM4A_RAW,DIGITAL,C2000 PWM output
+JCTRL,PWM4B,PWM4B_RAW,DIGITAL,C2000 PWM output
+JCTRL,ADC_PV_V,ADC_PV_V,ANALOG,C2000 ADC input
+JCTRL,ADC_VDC,ADC_VDC,ANALOG,C2000 ADC input
+JCTRL,ADC_PV_I,ADC_PV_I,ANALOG,C2000 ADC input
+JCTRL,ADC_IL_DC,ADC_IL_DC,ANALOG,C2000 ADC input
+JCTRL,ADC_GRID_V,ADC_GRID_V,ANALOG,C2000 ADC input
+JCTRL,ADC_UTILITY_V,ADC_UTILITY_V,ANALOG,C2000 ADC input
+JCTRL,ADC_GRID_I,ADC_GRID_I,ANALOG,C2000 ADC input
+JCTRL,ADC_TEMP,ADC_TEMP,ANALOG,C2000 ADC input
+JCTRL,TRIP_LATCH_N,TRIP_LATCH_N,SAFETY,C2000 asynchronous trip input
+JCTRL,ESTOP_N,ESTOP_N,SAFETY,Emergency-stop sense
+JCTRL,PRECHARGE_CMD,PRECHARGE_CMD,DIGITAL,Precharge relay command
+JCTRL,MAIN_CONTACTOR_CMD,MAIN_CONTACTOR_CMD,DIGITAL,Main DC contactor command
+JCTRL,GRID_BREAKER_CMD,GRID_BREAKER_CMD,DIGITAL,AC breaker command
+JCTRL,PWM_ARM,PWM_ARM,SAFETY,Gate enable authorization
+JCTRL,BIAS_POWER_GOOD,BIAS_POWER_GOOD,SAFETY,Gate bias monitor
+JCTRL,RS485_TX,RS485_TX,DIGITAL,Isolated serial transmit
+JCTRL,RS485_RX,RS485_RX,DIGITAL,Isolated serial receive
+JCTRL,RS485_DE,RS485_DE,DIGITAL,RS485 direction control
+JCTRL,DGND,DGND,DIGITAL,Controller ground
+JCTRL,PGND_SENSE,PGND,ANALOG,Single-point measurement reference
+KPRE,COIL+,RELAY12V,CONTROL,Precharge relay coil
+KPRE,COIL-,PRECHARGE_COIL_LOW,CONTROL,Precharge relay coil return
+QKPRE,D,PRECHARGE_COIL_LOW,CONTROL,Precharge coil low-side driver
+QKPRE,S,PGND,CONTROL,Precharge coil driver return
+QKPRE,G,PRECHARGE_CMD,CONTROL,Precharge coil command
+K1,COIL+,RELAY12V,CONTROL,Main contactor coil
+K1,COIL-,MAIN_COIL_LOW,CONTROL,Main contactor coil return
+QK1,D,MAIN_COIL_LOW,CONTROL,Main coil low-side driver
+QK1,S,PGND,CONTROL,Main coil driver return
+QK1,G,MAIN_CONTACTOR_CMD,CONTROL,Main coil command
+KAC,COIL+,RELAY12V,CONTROL,Grid breaker coil
+KAC,COIL-,GRID_COIL_LOW,CONTROL,Grid breaker coil return
+QKAC,D,GRID_COIL_LOW,CONTROL,Grid breaker low-side driver
+QKAC,S,PGND,CONTROL,Grid breaker driver return
+QKAC,G,GRID_BREAKER_CMD,CONTROL,Grid breaker command
+U1,VDD,GD12V,GATE,Gate-driver bias
+U1,VSS,PGND,GATE,Gate-driver ground
+U1,HB,BOOT1+,GATE,Bootstrap supply
+CB1,1,BOOT1+,GATE,Bootstrap capacitor
+CB1,2,SW_PV,GATE,Bootstrap return
+U2,VDD,GD12V,GATE,Gate-driver bias
+U2,VSS,PGND,GATE,Gate-driver ground
+U2,HB,BOOT2+,GATE,Bootstrap supply
+CB2,1,BOOT2+,GATE,Bootstrap capacitor
+CB2,2,SW_DC,GATE,Bootstrap return
+U3,VDD,GD12V,GATE,Gate-driver bias
+U3,VSS,PGND,GATE,Gate-driver ground
+U3,HB,BOOT3+,GATE,Bootstrap supply
+CB3,1,BOOT3+,GATE,Bootstrap capacitor
+CB3,2,SW_A,GATE,Bootstrap return
+U4,VDD,GD12V,GATE,Gate-driver bias
+U4,VSS,PGND,GATE,Gate-driver ground
+U4,HB,BOOT4+,GATE,Bootstrap supply
+CB4,1,BOOT4+,GATE,Bootstrap capacitor
+CB4,2,AC_RETURN,GATE,Bootstrap return
+UEN1,PWM,PWM1A_RAW,SAFETY,Raw PWM input
+UEN1,ARM,PWM_ARM,SAFETY,Global PWM authorization
+UEN1,ESTOP_N,ESTOP_N,SAFETY,Emergency stop interlock
+UEN1,TRIP_N,TRIP_LATCH_N,SAFETY,Hardware trip interlock
+UEN1,BIAS_OK,BIAS_POWER_GOOD,SAFETY,Gate-bias interlock
+UEN1,OUT,PWM1A,SAFETY,Interlocked gate-driver input
+UEN2,PWM,PWM1B_RAW,SAFETY,Raw PWM input
+UEN2,ARM,PWM_ARM,SAFETY,Global PWM authorization
+UEN2,ESTOP_N,ESTOP_N,SAFETY,Emergency stop interlock
+UEN2,TRIP_N,TRIP_LATCH_N,SAFETY,Hardware trip interlock
+UEN2,BIAS_OK,BIAS_POWER_GOOD,SAFETY,Gate-bias interlock
+UEN2,OUT,PWM1B,SAFETY,Interlocked gate-driver input
+UEN3,PWM,PWM2A_RAW,SAFETY,Raw PWM input
+UEN3,ARM,PWM_ARM,SAFETY,Global PWM authorization
+UEN3,ESTOP_N,ESTOP_N,SAFETY,Emergency stop interlock
+UEN3,TRIP_N,TRIP_LATCH_N,SAFETY,Hardware trip interlock
+UEN3,BIAS_OK,BIAS_POWER_GOOD,SAFETY,Gate-bias interlock
+UEN3,OUT,PWM2A,SAFETY,Interlocked gate-driver input
+UEN4,PWM,PWM2B_RAW,SAFETY,Raw PWM input
+UEN4,ARM,PWM_ARM,SAFETY,Global PWM authorization
+UEN4,ESTOP_N,ESTOP_N,SAFETY,Emergency stop interlock
+UEN4,TRIP_N,TRIP_LATCH_N,SAFETY,Hardware trip interlock
+UEN4,BIAS_OK,BIAS_POWER_GOOD,SAFETY,Gate-bias interlock
+UEN4,OUT,PWM2B,SAFETY,Interlocked gate-driver input
+UEN5,PWM,PWM3A_RAW,SAFETY,Raw PWM input
+UEN5,ARM,PWM_ARM,SAFETY,Global PWM authorization
+UEN5,ESTOP_N,ESTOP_N,SAFETY,Emergency stop interlock
+UEN5,TRIP_N,TRIP_LATCH_N,SAFETY,Hardware trip interlock
+UEN5,BIAS_OK,BIAS_POWER_GOOD,SAFETY,Gate-bias interlock
+UEN5,OUT,PWM3A,SAFETY,Interlocked gate-driver input
+UEN6,PWM,PWM3B_RAW,SAFETY,Raw PWM input
+UEN6,ARM,PWM_ARM,SAFETY,Global PWM authorization
+UEN6,ESTOP_N,ESTOP_N,SAFETY,Emergency stop interlock
+UEN6,TRIP_N,TRIP_LATCH_N,SAFETY,Hardware trip interlock
+UEN6,BIAS_OK,BIAS_POWER_GOOD,SAFETY,Gate-bias interlock
+UEN6,OUT,PWM3B,SAFETY,Interlocked gate-driver input
+UEN7,PWM,PWM4A_RAW,SAFETY,Raw PWM input
+UEN7,ARM,PWM_ARM,SAFETY,Global PWM authorization
+UEN7,ESTOP_N,ESTOP_N,SAFETY,Emergency stop interlock
+UEN7,TRIP_N,TRIP_LATCH_N,SAFETY,Hardware trip interlock
+UEN7,BIAS_OK,BIAS_POWER_GOOD,SAFETY,Gate-bias interlock
+UEN7,OUT,PWM4A,SAFETY,Interlocked gate-driver input
+UEN8,PWM,PWM4B_RAW,SAFETY,Raw PWM input
+UEN8,ARM,PWM_ARM,SAFETY,Global PWM authorization
+UEN8,ESTOP_N,ESTOP_N,SAFETY,Emergency stop interlock
+UEN8,TRIP_N,TRIP_LATCH_N,SAFETY,Hardware trip interlock
+UEN8,BIAS_OK,BIAS_POWER_GOOD,SAFETY,Gate-bias interlock
+UEN8,OUT,PWM4B,SAFETY,Interlocked gate-driver input
+U6,VS,3V3_A,ANALOG,U6 current sensor 3.3 V supply
+U6,GND,AGND,ANALOG,U6 current sensor ground
+U7,VS,3V3_A,ANALOG,U7 current sensor 3.3 V supply
+U7,GND,AGND,ANALOG,U7 current sensor ground
+U8,VS,3V3_A,ANALOG,U8 current sensor 3.3 V supply
+U8,GND,AGND,ANALOG,U8 current sensor ground
+U9,VCC,5V_ISO,ANALOG,PV voltage front-end supply
+U9,GND,DGND,ANALOG,PV voltage front-end ground
+U10,VCC,5V_ISO,ANALOG,DC voltage front-end supply
+U10,GND,DGND,ANALOG,DC voltage front-end ground
+U11,VCC,5V_ISO,ANALOG,Bus voltage front-end supply
+U11,GND,DGND,ANALOG,Bus voltage front-end ground
+U12,VCC,5V_ISO,ANALOG,Utility voltage front-end supply
+U12,GND,DGND,ANALOG,Utility voltage front-end ground
+U13,VCC,3V3,DIGITAL,Temperature sensor supply
+U13,GND,DGND,DIGITAL,Temperature sensor ground
+JBIAS,1,GD12V,GATE,Gate-driver bias input
+JBIAS,2,5V_ISO,ANALOG,Sensor supply input
+JBIAS,3,3V3,DIGITAL,Digital supply
+JBIAS,4,PGND,POWER,Power ground
+JBIAS,5,DGND,DIGITAL,Digital ground
+URS485,DI,RS485_TX,DIGITAL,Isolated RS485 transceiver input
+URS485,RO,RS485_RX,DIGITAL,Isolated RS485 transceiver output
+URS485,DE,RS485_DE,DIGITAL,Driver and receiver direction
+URS485,A,RS485_A,COMMS,RS485 bus A
+URS485,B,RS485_B,COMMS,RS485 bus B
+URS485,VCC,3V3,DIGITAL,Logic-side supply
+URS485,GND,DGND,DIGITAL,Logic-side ground
+JCOM,1,RS485_A,COMMS,External RS485 A
+JCOM,2,RS485_B,COMMS,External RS485 B
+JCOM,3,COM_GND_ISO,COMMS,Isolated cable reference
+URS485,GND_ISO,COM_GND_ISO,COMMS,Isolated bus reference
+UBIAS,IN,GD12V,GATE,Gate-bias monitor input
+UBIAS,OUT,BIAS_POWER_GOOD,SAFETY,Gate-bias power-good output
+UBIAS,GND,PGND,GATE,Gate-bias monitor return
+JCTRL,3V3,3V3,DIGITAL,Controller supply reference
+JBIAS,6,RELAY12V,CONTROL,Relay coil supply
+DKPRE,A,PRECHARGE_COIL_LOW,CONTROL,Precharge flyback diode anode
+DKPRE,K,RELAY12V,CONTROL,Precharge flyback diode cathode
+DK1,A,MAIN_COIL_LOW,CONTROL,Main contactor flyback diode anode
+DK1,K,RELAY12V,CONTROL,Main contactor flyback diode cathode
+DKAC,A,GRID_COIL_LOW,CONTROL,Grid breaker flyback diode anode
+DKAC,K,RELAY12V,CONTROL,Grid breaker flyback diode cathode
+U6,VREF,VREF_U6,ANALOG,Zero-current reference output
+U6,VOC,VOC_U6,ANALOG,30 A overcurrent threshold input
+U6,ALERT,SENSOR_ALERT_N,SAFETY,Open-drain sensor diagnostic output
+U6,NC,NC_U6,ANALOG,Reserved pin left unconnected
+RVH6,1,VREF_U6,ANALOG,VOC divider upper resistor 8.40 kohm
+RVH6,2,VOC_U6,ANALOG,VOC divider upper resistor 8.40 kohm
+RVL6,1,VOC_U6,ANALOG,VOC divider lower resistor 4.99 kohm
+RVL6,2,AGND,ANALOG,VOC divider return
+CVOC6,1,VOC_U6,ANALOG,10 uF threshold stabilizer
+CVOC6,2,AGND,ANALOG,Threshold capacitor return
+CVS6,1,3V3_A,ANALOG,100 nF local supply bypass
+CVS6,2,AGND,ANALOG,Supply bypass return
+CBULK6,1,3V3_A,ANALOG,10 uF local supply bulk capacitor
+CBULK6,2,AGND,ANALOG,Supply bulk return
+U7,VREF,VREF_U7,ANALOG,Zero-current reference output
+U7,VOC,VOC_U7,ANALOG,30 A overcurrent threshold input
+U7,ALERT,SENSOR_ALERT_N,SAFETY,Open-drain sensor diagnostic output
+U7,NC,NC_U7,ANALOG,Reserved pin left unconnected
+RVH7,1,VREF_U7,ANALOG,VOC divider upper resistor 8.40 kohm
+RVH7,2,VOC_U7,ANALOG,VOC divider upper resistor 8.40 kohm
+RVL7,1,VOC_U7,ANALOG,VOC divider lower resistor 4.99 kohm
+RVL7,2,AGND,ANALOG,VOC divider return
+CVOC7,1,VOC_U7,ANALOG,10 uF threshold stabilizer
+CVOC7,2,AGND,ANALOG,Threshold capacitor return
+CVS7,1,3V3_A,ANALOG,100 nF local supply bypass
+CVS7,2,AGND,ANALOG,Supply bypass return
+CBULK7,1,3V3_A,ANALOG,10 uF local supply bulk capacitor
+CBULK7,2,AGND,ANALOG,Supply bulk return
+U8,VREF,VREF_U8,ANALOG,Zero-current reference output
+U8,VOC,VOC_U8,ANALOG,30 A overcurrent threshold input
+U8,ALERT,SENSOR_ALERT_N,SAFETY,Open-drain sensor diagnostic output
+U8,NC,NC_U8,ANALOG,Reserved pin left unconnected
+RVH8,1,VREF_U8,ANALOG,VOC divider upper resistor 8.40 kohm
+RVH8,2,VOC_U8,ANALOG,VOC divider upper resistor 8.40 kohm
+RVL8,1,VOC_U8,ANALOG,VOC divider lower resistor 4.99 kohm
+RVL8,2,AGND,ANALOG,VOC divider return
+CVOC8,1,VOC_U8,ANALOG,10 uF threshold stabilizer
+CVOC8,2,AGND,ANALOG,Threshold capacitor return
+CVS8,1,3V3_A,ANALOG,100 nF local supply bypass
+CVS8,2,AGND,ANALOG,Supply bypass return
+CBULK8,1,3V3_A,ANALOG,10 uF local supply bulk capacitor
+CBULK8,2,AGND,ANALOG,Supply bulk return
+UTRIP,DIAG_N,SENSOR_ALERT_N,SAFETY,Current-sensor diagnostic input

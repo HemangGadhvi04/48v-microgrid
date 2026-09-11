@@ -1,0 +1,97 @@
+{
+  "adc_reference_v": 3.3,
+  "adc_bits": 12,
+  "anti_alias_resistance_ohm": 1000.0,
+  "anti_alias_capacitance_f": 4.7e-09,
+  "current_sensor": {
+    "manufacturer": "Texas Instruments",
+    "part_number": "TMCS1123B2AQDVGRQ1",
+    "supply_v": 3.3,
+    "sensitivity_v_per_a": 0.05,
+    "zero_current_output_v": 1.65,
+    "linear_range_a": 31.0,
+    "conductor_resistance_ohm": 0.0007,
+    "overcurrent_threshold_a": 30.0,
+    "overcurrent_response_max_s": 2.5e-7,
+    "voc_scale_v_per_a": 0.02,
+    "design_rms_current_a": {
+      "pv_current": 15.08,
+      "dc_inductor_current": 15.08,
+      "grid_current": 17.33
+    }
+  },
+  "channels": [
+    {
+      "name": "pv_voltage",
+      "unit": "V",
+      "plant_min": 0.0,
+      "plant_max": 65.0,
+      "adc_offset_v": 0.1,
+      "adc_gain_v_per_unit": 0.047619047619,
+      "implementation": "200 kohm / 10 kohm divider with 100 mV live-zero offset and rail-to-rail buffer"
+    },
+    {
+      "name": "dc_bus_voltage",
+      "unit": "V",
+      "plant_min": 0.0,
+      "plant_max": 60.0,
+      "adc_offset_v": 0.1,
+      "adc_gain_v_per_unit": 0.047619047619,
+      "implementation": "200 kohm / 10 kohm divider with 100 mV live-zero offset and rail-to-rail buffer"
+    },
+    {
+      "name": "pv_current",
+      "unit": "A",
+      "plant_min": -2.0,
+      "plant_max": 25.0,
+      "adc_offset_v": 1.65,
+      "adc_gain_v_per_unit": 0.05,
+      "implementation": "TI TMCS1123B2AQDVGRQ1, 50 mV/A, internal 1.65 V zero reference"
+    },
+    {
+      "name": "dc_inductor_current",
+      "unit": "A",
+      "plant_min": -25.0,
+      "plant_max": 25.0,
+      "adc_offset_v": 1.65,
+      "adc_gain_v_per_unit": 0.05,
+      "implementation": "TI TMCS1123B2AQDVGRQ1, 50 mV/A, ALERT routed to trip logic"
+    },
+    {
+      "name": "grid_voltage",
+      "unit": "V",
+      "plant_min": -45.0,
+      "plant_max": 45.0,
+      "adc_offset_v": 1.65,
+      "adc_gain_v_per_unit": 0.03,
+      "implementation": "differential or isolated amplifier, gain 30 mV/V, centered at 1.65 V"
+    },
+    {
+      "name": "utility_voltage",
+      "unit": "V",
+      "plant_min": -45.0,
+      "plant_max": 45.0,
+      "adc_offset_v": 1.65,
+      "adc_gain_v_per_unit": 0.03,
+      "implementation": "utility-side differential or isolated amplifier, gain 30 mV/V, centered at 1.65 V"
+    },
+    {
+      "name": "grid_current",
+      "unit": "A",
+      "plant_min": -30.0,
+      "plant_max": 30.0,
+      "adc_offset_v": 1.65,
+      "adc_gain_v_per_unit": 0.05,
+      "implementation": "TI TMCS1123B2AQDVGRQ1, 50 mV/A, ALERT routed to trip logic"
+    },
+    {
+      "name": "heatsink_temperature",
+      "unit": "degC",
+      "plant_min": -20.0,
+      "plant_max": 125.0,
+      "adc_offset_v": 0.5,
+      "adc_gain_v_per_unit": 0.01,
+      "implementation": "buffered analog temperature sensor, 500 mV at 0 degC and 10 mV/degC"
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "schema_revision": "project-1.0",
+  "base_register": 40000,
+  "unit_id": 1,
+  "models": [
+    {
+      "id": 1,
+      "name": "common",
+      "offset": 2,
+      "length": 66,
+      "points": [
+        {"name": "Mn", "offset": 2, "type": "string", "registers": 16, "value": "Open Microgrid Research"},
+        {"name": "Md", "offset": 18, "type": "string", "registers": 16, "value": "48V-500W-LAB"},
+        {"name": "Opt", "offset": 34, "type": "string", "registers": 8, "value": "LV research bus"},
+        {"name": "Vr", "offset": 42, "type": "string", "registers": 8, "value": "0.1.0"},
+        {"name": "SN", "offset": 50, "type": "string", "registers": 16, "value": "SIM-0001"},
+        {"name": "DA", "offset": 66, "type": "uint16", "value": 1}
+      ]
+    },
+    {
+      "id": 101,
+      "name": "inverter_single_phase",
+      "offset": 70,
+      "length": 50,
+      "points": [
+        {"name": "A", "offset": 2, "type": "uint16", "scale": -2, "source": "ac_current_a"},
+        {"name": "AphA", "offset": 3, "type": "uint16", "scale": -2, "source": "ac_current_a"},
+        {"name": "A_SF", "offset": 6, "type": "sunssf", "value": -2},
+        {"name": "PhVphA", "offset": 10, "type": "uint16", "scale": -2, "source": "ac_voltage_v"},
+        {"name": "V_SF", "offset": 13, "type": "sunssf", "value": -2},
+        {"name": "W", "offset": 14, "type": "int16", "scale": 0, "source": "active_power_w"},
+        {"name": "W_SF", "offset": 15, "type": "sunssf", "value": 0},
+        {"name": "Hz", "offset": 16, "type": "uint16", "scale": -2, "source": "frequency_hz"},
+        {"name": "Hz_SF", "offset": 17, "type": "sunssf", "value": -2},
+        {"name": "VA", "offset": 18, "type": "int16", "scale": 0, "source": "apparent_power_va"},
+        {"name": "VA_SF", "offset": 19, "type": "sunssf", "value": 0},
+        {"name": "VAr", "offset": 20, "type": "int16", "scale": 0, "source": "reactive_power_var"},
+        {"name": "VAr_SF", "offset": 21, "type": "sunssf", "value": 0},
+        {"name": "PF", "offset": 22, "type": "int16", "scale": -2, "source": "power_factor_percent"},
+        {"name": "PF_SF", "offset": 23, "type": "sunssf", "value": -2},
+        {"name": "WH", "offset": 24, "type": "acc32", "scale": 0, "source": "lifetime_energy_wh"},
+        {"name": "WH_SF", "offset": 26, "type": "sunssf", "value": 0},
+        {"name": "DCA", "offset": 27, "type": "uint16", "scale": -2, "source": "dc_current_a"},
+        {"name": "DCA_SF", "offset": 28, "type": "sunssf", "value": -2},
+        {"name": "DCV", "offset": 29, "type": "uint16", "scale": -2, "source": "dc_voltage_v"},
+        {"name": "DCV_SF", "offset": 30, "type": "sunssf", "value": -2},
+        {"name": "DCW", "offset": 31, "type": "int16", "scale": 0, "source": "dc_power_w"},
+        {"name": "DCW_SF", "offset": 32, "type": "sunssf", "value": 0},
+        {"name": "TmpCab", "offset": 33, "type": "int16", "scale": -1, "source": "cabinet_temperature_c"},
+        {"name": "TmpSnk", "offset": 34, "type": "int16", "scale": -1, "source": "heatsink_temperature_c"},
+        {"name": "Tmp_SF", "offset": 37, "type": "sunssf", "value": -1},
+        {"name": "St", "offset": 38, "type": "enum16", "source": "operating_state"},
+        {"name": "Evt1", "offset": 40, "type": "bitfield32", "source": "event_bits"}
+      ]
+    }
+  ],
+  "end_model_offset": 122
+}

@@ -1,0 +1,54 @@
+function p = solar_grid_params()
+% Coupled PV / averaged four-switch DC/DC / switching inverter parameters.
+% Numerical model only. Initial capacitor energy is explicitly accounted for.
+p.dt=1e-6;
+p.control_dt=50e-6;
+p.mppt_dt=0.010;
+p.stop_time=2.4;
+p.grid_hz=50;
+p.grid_peak=40.8;
+p.bus_target=48;
+p.initial_bus=48;
+p.initial_pv=54;
+p.initial_mppt=46;
+p.Cpv=2e-3;
+p.Cdc=30e-3;
+p.Ldc=500e-6;
+p.Rdc=0.04;
+p.L1=150e-6;
+p.R1=0.015;
+p.Cac=20e-6;
+p.Rd=0.56;
+p.L2=95e-6; % includes 20 uH grid inductance
+p.R2=0.065; % includes 50 mOhm grid resistance
+p.switching_hz=20e3;
+p.modulation_max=0.95;
+p.max_power=500;
+p.max_il=18;
+p.max_grid_peak=27;
+p.pv_kp=1.0;
+p.pv_ki=150;
+p.il_kp=3.0;
+p.il_ki=500;
+p.energy_kp=40;
+p.energy_ki=400;
+p.power_filter_hz=20;
+p.current_kp=0.65;
+p.current_kr=28;
+p.current_wc=2*pi*5;
+p.pll_k=sqrt(2);
+p.pll_kp=2*0.707*2*pi*12;
+p.pll_ki=(2*pi*12)^2;
+p.current_phase_samples=2.5;
+p.mppt_step=0.2;
+p.source_enable_time=0.10;
+p.source_ramp_time=0.08;
+% Effective synthetic array, same parameter set as pv_default_params.
+p.pv_isc=11.55;
+p.pv_voc=58;
+p.pv_alpha=0.00055;
+p.pv_ns=96;
+p.pv_n=1.25;
+p.pv_rs=0.28;
+p.pv_rsh=450;
+end

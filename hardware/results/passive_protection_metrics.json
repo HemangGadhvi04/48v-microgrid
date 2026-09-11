@@ -1,0 +1,43 @@
+{
+  "dc_link": {
+    "nominal_capacitance_f": 0.03,
+    "minimum_capacitance_f": 0.024,
+    "required_capacitance_f": 0.014736568804805122,
+    "predicted_ripple_pp_v_at_minimum_c": 1.228047400400427,
+    "ripple_current_a_rms": 6.547285010986551,
+    "bank_ripple_rating_a_rms": 30.299999999999997,
+    "ripple_current_margin": 4.627872461509716,
+    "bank_esr_ohm": 0.009333333333333334,
+    "bank_esr_loss_w": 0.40009144947416553,
+    "stored_energy_j": 43.739999999999995,
+    "voltage_margin": 1.8518518518518519
+  },
+  "precharge": {
+    "initial_power_w": 62.04255319148936,
+    "time_constant_s": 1.41,
+    "time_to_90_percent_s": 3.246644981121604,
+    "power_rating_margin": 1.6117969821673526,
+    "energy_per_charge_j": 43.739999999999995
+  },
+  "lcl_capacitor": {
+    "fundamental_current_a_rms": 0.1812698961121311,
+    "fundamental_reactive_power_var": 5.229636502834982,
+    "ripple_rating_to_fundamental_margin": 100.95443530612424,
+    "voltage_margin": 31.862697245840955
+  },
+  "damping_resistor": {
+    "continuous_power_margin": 100.0
+  },
+  "dc_fuse": {
+    "voltage_margin": 2.962962962962963,
+    "full_power_current_margin": 2.1
+  },
+  "power_connector": {
+    "current_margin": 2.0,
+    "voltage_margin": 11.11111111111111
+  },
+  "main_contactor": {
+    "current_margin": 4.0,
+    "voltage_margin": 1.7777777777777777
+  }
+}

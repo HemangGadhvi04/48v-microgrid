@@ -1,0 +1,36 @@
+# Reference Component Evidence
+
+Checked 11 September 2026. These records establish candidate specifications;
+they do not replace schematic review, distributor lifecycle checks, bench loss
+measurements, or the final procurement BOM.
+
+| Function | Candidate | Evidence used | Design implication |
+|---|---|---|---|
+| Power MOSFET | TI CSD19536KCS | [TI product page and Rev. C datasheet](https://www.ti.com/product/CSD19536KCS): active 100 V N-channel TO-220, 2.7 milliohm maximum at 10 V gate drive, 118 nC typical total gate charge | Meets the 100 V reference rating. The calculator uses 4.6 milliohm at hot conditions rather than the headline room-temperature value. Availability must be checked before purchase. |
+| Half-bridge driver | TI UCC27211A | [TI Rev. D datasheet](https://www.ti.com/lit/ds/symlink/ucc27211a.pdf): 120 V bootstrap half-bridge driver, independent high/low inputs, approximately 3.7 A source and 4.5 A sink, 8 V UVLO | Suitable reference for the 100 V silicon MOSFET leg. Bootstrap refresh and maximum duty must be verified in sustained buck/boost states; firmware presently limits duty to 98%. |
+| Current sensing | TI TMCS1123B2AQDVGRQ1 | [TI product page and Rev. D datasheet](https://www.ti.com/product/TMCS1123): reinforced isolated Hall sensor, 3.3 V supply, 50 mV/A sensitivity, +/-31 A linear range, 250 kHz small-signal bandwidth, and fast overcurrent alert | U6-U8 exact reference candidate. The 30 A threshold requires VOC = 0.600 V; estimated conductor loss is at most 0.210 W at the design RMS currents. |
+| Controller board | TI LAUNCHXL-F28379D | [TI development-kit page](https://www.ti.com/tool/LAUNCHXL-F28379D): F28379D LaunchPad with isolated XDS100v2 debug probe and four 20-pin headers | Selected prototype controller. Header-to-GPIO allocation must be checked against the board files in the installed C2000Ware revision before schematic release. |
+| Controller timing | TI TMS320F28379D | [TI device datasheet](https://www.ti.com/lit/ds/symlink/tms320f28379d.pdf): 100 MHz maximum ePWM clock above 100 MHz SYSCLK and 75 ns minimum 12-bit single-ended ADC acquisition window | The frozen port uses 100 MHz ePWM, 200 ns acquisition, generated timing constants, and a 35 us measured-control deadline. |
+| DC-link capacitor | KEMET ALS31A103KE100 | [KEMET part specification](https://search.kemet.com/download/specsheet/ALS31A103KE100): 10,000 uF ±20%, 100 VDC, 10.1 Arms at 100 Hz/85 C, 28 milliohm ESR at 100 Hz/20 C | Three in parallel give 30 mF nominal, 24 mF at minimum tolerance, and 30.3 Arms aggregate ripple rating. |
+| LCL capacitor | KEMET C4AQUBW5200A3MJ | [KEMET part specification](https://search.kemet.com/component-documentation/download/specsheet/C4AQUBW5200A3MJ): 20 uF ±5% polypropylene, 1,300 VDC, 18.3 Arms at 10 kHz/70 C | Strong voltage and fundamental-current margin; switching-ripple temperature must still be measured. |
+| Precharge / damping resistors | TE HSC10047RJ / HSC100R56J | [47 ohm](https://www.te.com/en/product-3-1625999-6.html) and [0.56 ohm](https://www.te.com/en/product-5-1625999-5.html) active 100 W chassis-mount parts | Both require the datasheet heatsink. Precharge initial power is below the continuous rating; damping has large margin over its 1 W allocation. |
+| DC fuse | Littelfuse JLLN030.T | [JLLN datasheet](https://www.littelfuse.com/assetdocs/jlls-fuse-datasheet.pdf?assetguid=2925cc6d-2278-44e0-8fdd-106f087f707e): 30 A, 160 VDC, 50 kA DC interrupt rating | Voltage and interrupt ratings are suitable; measured semiconductor/cable coordination remains required. |
+| DC contactor | Albright SW80B | [SW80 datasheet](https://www.albrightinternational.com/wpcms/wp-content/uploads/2020/08/SW80-Data-Sheet.pdf): 96 VDC version with blowouts, 100 A thermal current, 12 V coils and auxiliary contacts available | Freeze a continuous-duty 12 V coil, auxiliary contact, and suppression configuration with the vendor before ordering. |
+| AC contactor | Omron G9KA-1A1B-E DC12 | [Omron datasheet](https://components.omron.com/sites/default/files/datasheet_pdf/K335-E1.pdf): high-capacity normally-open relay, 12 VDC coil option and mechanically linked mirror auxiliary contact | Suitable conservative reference for the 28.85 Vrms research bus; implement the required post-pull-in holding-voltage reduction. |
+| Power connector | Anderson SB50 | [Anderson datasheet](https://www.andersonpower.com/content/dam/app/ecommerce/product-pdfs/SB50/ds-sb50.pdf): 600 V, 50 A CSA wire-to-wire rating with 6 AWG, and 16-to-6 AWG contact range | Use 8 AWG silver contacts, keyed colors, strain relief, and enclosure boots; validate crimp and temperature rise at 25 A. |
+| Gate driver | TI UCC27211A | [TI Rev. D datasheet](https://www.ti.com/lit/ds/symlink/ucc27211a.pdf): integrated 120 V bootstrap diode, 8 V to 17 V supply, 7.9 V maximum bootstrap rising UVLO, and 17 ns maximum channel delay mismatch | A 100 nF/5% bootstrap capacitor retains a calculated 1.75 V UVLO margin through the 98% maximum on-time; external bootstrap diodes were removed. |
+| PWM safety logic | TI SN74HCS21-Q1 and SN74LVC08A-Q1 | [Four-input Schmitt AND](https://www.ti.com/product/SN74HCS21-Q1) and [quad two-input AND](https://www.ti.com/product/SN74LVC08A-Q1), both automotive rated | The first combines four independent permissions; two quad gates apply the result to all eight PWM inputs. Calculated worst-case disable is 85 ns. |
+| Trip latch / bias monitor | TI SN74HCS02-Q1 / TPS3700-Q1 | [Schmitt NOR logic](https://www.ti.com/product/SN74HCS02-Q1) and [adjustable 18 V window detector](https://www.ti.com/product/TPS3700-Q1) | Implements an asynchronous latched trip and independently qualifies the 12 V gate-bias rail. Divider values and reset filtering are finalized during schematic capture. |
+| Relay driver / flyback | Nexperia PMV37ENEA / onsemi MURS120T3G | 60 V logic-level MOSFET and [200 V, 1 A ultrafast rectifier](https://www.onsemi.com/download/data-sheet/pdf/murs120t3-d.pdf) | Provides the three low-side coil drives; verify current against final contactor coil codes. |
+
+The switch-node clamps and several low-power interface parts remain requirements
+rather than frozen manufacturer parts. Final procurement still depends on
+distributor lifecycle checks, mechanical layout, and switching-overshoot tests.
+
+For the magnetics feasibility calculation, the E65/32/27 geometry and 40-grade
+initial AL come from the manufacturer's [00F6527E040 product-finder record](https://www.mag-inc.com/advanced-part-number-finder?pn=00F6527).
+DC-bias retention and switching-ripple loss use the coefficients in Magnetics'
+[Curve Fit Equation Tool](https://www.mag-inc.com/Company/News/August-2024/Updated-Curve-Fit-Equation-Tool),
+row set "Kool Mu HF E-core, U-core", permeability 40. The resulting reference
+uses three cores for LDC, two for L1, and one for L2. Bobbin/window fit, winding
+loss, temperature rise, and loaded-inductance measurements remain open.
