@@ -19,10 +19,27 @@
     "shunt_resistance_ohm": 10000.0,
     "isolator_gain": 2.0,
     "difference_amplifier_gain": 0.75,
+    "difference_amplifier_input_resistance_ohm": 20000.0,
+    "difference_amplifier_feedback_resistance_ohm": 15000.0,
     "adc_center_v": 1.65,
     "minimum_v": -45.0,
     "maximum_v": 45.0,
-    "isolator_input_limit_v": 1.0
+    "isolator_input_limit_v": 1.0,
+    "required_pin_connections": [
+      "DCDC_OUT-HLDO_IN",
+      "DCDC_HGND-HGND",
+      "LDO_OUT-DCDC_IN",
+      "DCDC_GND-GND",
+      "INN-HGND"
+    ],
+    "required_decoupling": {
+      "VDD_GND": ["1nF", "1uF"],
+      "DCDC_IN_DCDC_GND": ["100nF"],
+      "DCDC_OUT_DCDC_HGND": ["1nF", "1uF"],
+      "HLDO_OUT_HGND": ["1nF", "100nF"],
+      "INP_INN": ["1nF"]
+    },
+    "diagnostic_output": "DIAG active-low open-drain to controller fault input"
   },
   "temperature_channel": {
     "part_number": "TMP235AEDBZRQ1",

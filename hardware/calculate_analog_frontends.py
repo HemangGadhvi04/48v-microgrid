@@ -44,6 +44,8 @@ def calculate(data):
     return {
         "dc_voltage_channels": dc_rows,
         "isolated_ac_voltage": {
+            "isolator_part_number": ac["isolator_part_number"],
+            "adc_driver_part_number": ac["adc_driver_part_number"],
             "divider_gain": ac_divider_gain,
             "system_gain_v_per_v": ac_system_gain,
             "isolator_input_peak_v": ac_input_peak,
@@ -52,6 +54,9 @@ def calculate(data):
             "adc_max_v": ac_high,
             "divider_power_at_peak_w": max(abs(ac["minimum_v"]), abs(ac["maximum_v"])) ** 2
             / (ac["line_resistance_ohm"] + ac["shunt_resistance_ohm"]),
+            "required_pin_connections": ac["required_pin_connections"],
+            "required_decoupling": ac["required_decoupling"],
+            "diagnostic_output": ac["diagnostic_output"],
         },
         "temperature": {
             "adc_min_v": temp["offset_v"] + temp["gain_v_per_c"] * temp["minimum_c"],
@@ -89,6 +94,11 @@ drivers. The 498 kohm / 10 kohm divider limits the isolator input to
 {ac['isolator_input_peak_v']:.3f} V at +/-45 V. Overall gain is
 {ac['system_gain_v_per_v']:.9f} V/V and the ADC range is
 {ac['adc_min_v']:.3f} to {ac['adc_max_v']:.3f} V.
+
+Schematic release must implement all five package ties in
+`required_pin_connections`, every decoupling group in
+`required_decoupling`, and route the active-low open-drain DIAG output into
+the controller fault path.
 
 The heatsink channel uses {data['temperature_channel']['part_number']};
 -20 to 125 C maps to {temp['adc_min_v']:.3f} to {temp['adc_max_v']:.3f} V.

@@ -17,6 +17,11 @@ drivers. The 498 kohm / 10 kohm divider limits the isolator input to
 0.029527559 V/V and the ADC range is
 0.321 to 2.979 V.
 
+Schematic release must implement all five package ties in
+`required_pin_connections`, every decoupling group in
+`required_decoupling`, and route the active-low open-drain DIAG output into
+the controller fault path.
+
 The heatsink channel uses TMP235AEDBZRQ1;
 -20 to 125 C maps to 0.300 to 1.750 V.
 All ADC paths retain the 1 kohm / 4.7 nF output filter

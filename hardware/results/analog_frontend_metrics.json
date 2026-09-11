@@ -20,13 +20,43 @@
     }
   },
   "isolated_ac_voltage": {
+    "isolator_part_number": "AMC3330QDWERQ1",
+    "adc_driver_part_number": "OPA320AQDBVRQ1G4",
     "divider_gain": 0.01968503937007874,
     "system_gain_v_per_v": 0.02952755905511811,
     "isolator_input_peak_v": 0.8858267716535433,
     "isolator_input_limit_v": 1.0,
     "adc_min_v": 0.32125984251968487,
     "adc_max_v": 2.978740157480315,
-    "divider_power_at_peak_w": 0.003986220472440945
+    "divider_power_at_peak_w": 0.003986220472440945,
+    "required_pin_connections": [
+      "DCDC_OUT-HLDO_IN",
+      "DCDC_HGND-HGND",
+      "LDO_OUT-DCDC_IN",
+      "DCDC_GND-GND",
+      "INN-HGND"
+    ],
+    "required_decoupling": {
+      "VDD_GND": [
+        "1nF",
+        "1uF"
+      ],
+      "DCDC_IN_DCDC_GND": [
+        "100nF"
+      ],
+      "DCDC_OUT_DCDC_HGND": [
+        "1nF",
+        "1uF"
+      ],
+      "HLDO_OUT_HGND": [
+        "1nF",
+        "100nF"
+      ],
+      "INP_INN": [
+        "1nF"
+      ]
+    },
+    "diagnostic_output": "DIAG active-low open-drain to controller fault input"
   },
   "temperature": {
     "adc_min_v": 0.3,

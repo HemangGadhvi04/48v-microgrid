@@ -34,6 +34,18 @@ class AnalogFrontendTests(unittest.TestCase):
     def test_result_is_strict_json(self):
         json.dumps(self.result, allow_nan=False)
 
+    def test_isolator_release_connections_are_complete(self):
+        ac = self.result["isolated_ac_voltage"]
+        self.assertEqual(set(ac["required_pin_connections"]), {
+            "DCDC_OUT-HLDO_IN", "DCDC_HGND-HGND", "LDO_OUT-DCDC_IN",
+            "DCDC_GND-GND", "INN-HGND",
+        })
+        self.assertEqual(set(ac["required_decoupling"]), {
+            "VDD_GND", "DCDC_IN_DCDC_GND", "DCDC_OUT_DCDC_HGND",
+            "HLDO_OUT_HGND", "INP_INN",
+        })
+        self.assertIn("DIAG", ac["diagnostic_output"])
+
 
 if __name__ == "__main__":
     unittest.main()
