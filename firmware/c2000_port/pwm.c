@@ -21,12 +21,17 @@ static void configure_one_pwm(uint32_t base)
     EPWM_setCounterCompareShadowLoadMode(base, EPWM_COUNTER_COMPARE_A, EPWM_COMP_LOAD_ON_CNTR_ZERO);
     EPWM_setActionQualifierAction(base, EPWM_AQ_OUTPUT_A, EPWM_AQ_OUTPUT_LOW, EPWM_AQ_OUTPUT_ON_TIMEBASE_UP_CMPA);
     EPWM_setActionQualifierAction(base, EPWM_AQ_OUTPUT_A, EPWM_AQ_OUTPUT_HIGH, EPWM_AQ_OUTPUT_ON_TIMEBASE_DOWN_CMPA);
+
     EPWM_setRisingEdgeDeadBandDelayInput(base, EPWM_DB_INPUT_EPWMA);
     EPWM_setFallingEdgeDeadBandDelayInput(base, EPWM_DB_INPUT_EPWMA);
     EPWM_setDeadBandDelayMode(base, EPWM_DB_RED, true);
     EPWM_setDeadBandDelayMode(base, EPWM_DB_FED, true);
     EPWM_setDeadBandDelayPolarity(base, EPWM_DB_RED, EPWM_DB_POLARITY_ACTIVE_HIGH);
     EPWM_setDeadBandDelayPolarity(base, EPWM_DB_FED, EPWM_DB_POLARITY_ACTIVE_LOW);
+
+    // Explicitly tie DB clock to TBCLK for deterministic timing
+    EPWM_setDeadBandCounterClock(base, EPWM_DB_COUNTER_CLOCK_FULL_CYCLE);
+
     EPWM_setRisingEdgeDelayCount(base, MG_C2000_PWM_DEADBAND_COUNTS);
     EPWM_setFallingEdgeDelayCount(base, MG_C2000_PWM_DEADBAND_COUNTS);
 }
@@ -35,7 +40,7 @@ void init_epwm(void)
 {
     uint16_t index;
     for (index = 0u; index < 4u; index++) configure_one_pwm(pwm_bases[index]);
-    
+
     EPWM_setADCTriggerSource(EPWM1_BASE, EPWM_SOC_A, EPWM_SOC_TBCTR_ZERO);
     EPWM_setADCTriggerEventPrescale(EPWM1_BASE, EPWM_SOC_A, 1u);
     EPWM_enableADCTrigger(EPWM1_BASE, EPWM_SOC_A);

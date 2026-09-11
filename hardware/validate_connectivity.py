@@ -20,7 +20,7 @@ for row in rows:
     by_net[row["net"]].append((row["reference"], row["pin"]))
     by_ref[row["reference"]][row["pin"]] = row["net"]
 for net, endpoints in by_net.items():
-    if net != "HEATSINK":
+    if net != "HEATSINK" and not net.startswith("NC_"):
         assert len(endpoints) >= 2, f"dangling net {net}: {endpoints}"
 
 adc_nets = {

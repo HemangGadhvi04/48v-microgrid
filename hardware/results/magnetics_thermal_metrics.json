@@ -1,0 +1,61 @@
+{
+  "assumptions": {
+    "copper_resistivity_at_100c_ohm_mm2_per_mm": 2.3e-05,
+    "window_area_per_core_pair_mm2": 411.0,
+    "winding_packing_factor": 0.7
+  },
+  "inductors": [
+    {
+      "name": "LDC",
+      "core_count": 3,
+      "turns": 28,
+      "minimum_strands_by_current_density": 20,
+      "minimum_strands_by_dcr": 52,
+      "selected_strands": 52,
+      "mlt_mm": 235.79999999999998,
+      "dcr_ohm": 0.014872926593359002,
+      "maximum_dcr_ohm": 0.015,
+      "copper_loss_w": 3.3821986940600346,
+      "core_loss_w": 0.0958551272499048,
+      "total_loss_w": 3.4780538213099392,
+      "effective_window_fill": 0.33123036899162467,
+      "estimated_temperature_rise_c": 9.272934071982537,
+      "passes_screen": true
+    },
+    {
+      "name": "L1",
+      "core_count": 2,
+      "turns": 19,
+      "minimum_strands_by_current_density": 23,
+      "minimum_strands_by_dcr": 34,
+      "selected_strands": 34,
+      "mlt_mm": 181.0,
+      "dcr_ohm": 0.01184816803175496,
+      "maximum_dcr_ohm": 0.012,
+      "copper_loss_w": 3.5583472719921314,
+      "core_loss_w": 0.19005115207579376,
+      "total_loss_w": 3.748398424067925,
+      "effective_window_fill": 0.22044109035225568,
+      "estimated_temperature_rise_c": 11.989794991400977,
+      "passes_screen": true
+    },
+    {
+      "name": "L2",
+      "core_count": 1,
+      "turns": 19,
+      "minimum_strands_by_current_density": 23,
+      "minimum_strands_by_dcr": 24,
+      "selected_strands": 24,
+      "mlt_mm": 126.19999999999999,
+      "dcr_ohm": 0.011703066158069562,
+      "maximum_dcr_ohm": 0.012,
+      "copper_loss_w": 3.5147689858802567,
+      "core_loss_w": 0.09502557603789688,
+      "total_loss_w": 3.6097945619181537,
+      "effective_window_fill": 0.31121095108553737,
+      "estimated_temperature_rise_c": 14.985052105837878,
+      "passes_screen": true
+    }
+  ],
+  "all_pass_screen": true
+}

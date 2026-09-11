@@ -1,13 +1,13 @@
-# Magnetics Thermal & Winding Proof
+# Magnetics Winding and Thermal Screen
 
-This report verifies the winding feasibility (window fill) and thermal limits (temperature rise) for the E65 Kool Mu inductor designs at full 500W load.
+This analytical screen sizes conductor count from both current-density and DCR requirements. The stacked-core window scales with stack count and a 70% round-wire packing factor is applied. Release still requires the exact bobbin drawing, a wound sample, measured DCR, loaded inductance, and a thermal test.
 
-| Inductor | Cores | Turns | Strands | MLT (mm) | DCR (mΩ) | Cu Loss (W) | Core Loss (W) | Total (W) | Fill Factor | $\Delta$T (°C) |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| LDC | 3 | 28 | 20 | 235.8 | 38.67 | 8.79 | 0.10 | 8.89 | 26.8% | 20.3 |
-| L1 | 2 | 19 | 23 | 181.0 | 17.51 | 5.26 | 0.19 | 5.45 | 20.9% | 16.4 |
-| L2 | 1 | 19 | 23 | 126.2 | 12.21 | 3.67 | 0.10 | 3.76 | 20.9% | 15.5 |
+| Inductor | Cores | Turns | Strands (current / DCR / selected) | Est. DCR / limit | Effective fill | Est. loss | Est. rise | Screen |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| LDC | 3 | 28 | 20 / 52 / 52 | 14.87 / 15.00 mOhm | 33.1% | 3.48 W | 9.3 C | PASS |
+| L1 | 2 | 19 | 23 / 34 / 34 | 11.85 / 12.00 mOhm | 22.0% | 3.75 W | 12.0 C | PASS |
+| L2 | 1 | 19 | 23 / 24 / 24 | 11.70 / 12.00 mOhm | 31.1% | 3.61 W | 15.0 C | PASS |
 
-## Feasibility Assessment
+## Result
 
-✅ **PASSED**: All inductors have a window fill factor below 40% and a predicted temperature rise below 40°C.
+**PRELIMINARY PASS:** the revised conductor counts satisfy the analytical DCR, effective-fill, and temperature-rise screens.

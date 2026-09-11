@@ -49,19 +49,20 @@ This document explicitly defines the electrical and logical boundary between the
 *   **Modbus UART:** `SCI-B` mapped to GPIO18/19.
 *   **Debugging:** LaunchPad JTAG.
 
-**Exit Criterion Achieved**: No remaining TBD on safety-critical or PCB-routing-critical signals.
+**Digital interface exit criterion achieved.** Analog-interface release remains
+open for the voltage and temperature channels listed as `BLOCKED` below.
 
 ## Analog Calibration & Scaling
 
-| ADC Channel | Signal | Sensor | Range | Scaling Factor | ADC Voltage | ADC Equation (Counts to Physical) |
-|---|---|---|---|---|---|---|
-| ADCA_14 | PV Voltage | Divider + Buffer | 0 - 100V | 1/33.33 | 0 - 3.0V | `V = (counts / 4095) * 3.3 * 33.33` |
-| ADCC_3  | DC Bus Voltage | Divider + Buffer | 0 - 100V | 1/33.33 | 0 - 3.0V | `V = (counts / 4095) * 3.3 * 33.33` |
-| ADCB_3  | PV Current | TMCS1123 (50mV/A) | ±30A | 50 mV/A (Offset: 1.65V) | 0.15 - 3.15V | `I = ((counts / 4095) * 3.3 - 1.65) / 0.05` |
-| ADCA_3  | DC Inductor Current | TMCS1123 (50mV/A) | ±30A | 50 mV/A (Offset: 1.65V) | 0.15 - 3.15V | `I = ((counts / 4095) * 3.3 - 1.65) / 0.05` |
-| ADCC_2  | Grid Voltage | AMC1301 + AMC3330 | ±400V peak | 1/150 (Offset: 1.65V) | 0.31 - 2.98V | `V = ((counts / 4095) * 3.3 - 1.65) * 150` |
-| ADCB_2  | Utility Voltage | AMC1301 + AMC3330 | ±400V peak | 1/150 (Offset: 1.65V) | 0.31 - 2.98V | `V = ((counts / 4095) * 3.3 - 1.65) * 150` |
-| ADCA_2  | Grid Current | TMCS1123 (50mV/A) | ±30A | 50 mV/A (Offset: 1.65V) | 0.15 - 3.15V | `I = ((counts / 4095) * 3.3 - 1.65) / 0.05` |
-| ADCA_0  | Heatsink Temp | 10k NTC | 0 - 100°C | Non-linear | 0 - 3.3V | `T = SteinhartHart(counts)` |
+For every ADC input, the table below derives scaling **only** from the actual selected hardware BOM and schematic values (per `hardware/sensing_inputs.json`). Any channel lacking an exact frozen part number or schematic circuit is marked BLOCKED pending Gate 2 completion.
 
-*Note: These scale equations are initial design targets to freeze the analog chain design. Final fine-tuning offsets must be written to calibration EEPROM.*
+| Signal | Exact Component | Schematic Network | ADC Channel | Physical Range | ADC Range | Equation (Counts to Physical) | Status |
+|---|---|---|---|---:|---:|---|---|
+| PV Voltage | TBD (Buffer IC) | 200k/10k divider + 100mV offset | ADCA_14 | 0 - 65 V | 0.1 - 3.2V | TBD (Blocked pending Buffer P/N) | **BLOCKED** |
+| DC Bus Voltage | TBD (Buffer IC) | 200k/10k divider + 100mV offset | ADCC_3 | 0 - 60 V | 0.1 - 2.95V | TBD (Blocked pending Buffer P/N) | **BLOCKED** |
+| PV Current | TMCS1123B2AQDVGRQ1 | direct / 1kΩ + 4.7nF filter | ADCB_3 | ±25 A | 0.4 - 2.9V | `I = ((counts / 4095) * 3.3 - 1.65) / 0.05` | **PASS** |
+| DC Inductor Current| TMCS1123B2AQDVGRQ1 | direct / 1kΩ + 4.7nF filter | ADCA_3 | ±25 A | 0.4 - 2.9V | `I = ((counts / 4095) * 3.3 - 1.65) / 0.05` | **PASS** |
+| Grid Current | TMCS1123B2AQDVGRQ1 | direct / 1kΩ + 4.7nF filter | ADCA_2 | ±30 A | 0.15 - 3.15V| `I = ((counts / 4095) * 3.3 - 1.65) / 0.05` | **PASS** |
+| PCC Voltage | TBD (Iso Amp IC) | TBD (Gain = 30 mV/V) | ADCC_2 | ±45 V | 0.3 - 3.0V | TBD (Blocked pending Iso Amp P/N) | **BLOCKED** |
+| Utility Voltage | TBD (Iso Amp IC) | TBD (Gain = 30 mV/V) | ADCB_2 | ±45 V | 0.3 - 3.0V | TBD (Blocked pending Iso Amp P/N) | **BLOCKED** |
+| Heatsink Temp | TBD (Sensor IC) | 500mV @ 0°C, 10mV/°C | ADCA_0 | -20 - 125 °C| 0.3 - 1.75V | TBD (Blocked pending Sensor P/N) | **BLOCKED** |

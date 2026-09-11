@@ -1,0 +1,45 @@
+# Rigorous 10-Gate Execution Plan
+
+- [x] **Gate 0: Freeze the Hardware/Firmware Contract**
+  - [x] Create `docs/hardware_firmware_interface.md`
+  - [x] Freeze PWM, ADC, GPIO mapping and polarities
+- [ ] **Gate 1: Real C2000 Target Build**
+  - [x] 1A. Toolchain: Setup skeletal `firmware/c2000_port/` structure (board, adc, pwm, protection, interrupts, communications)
+  - [ ] 1B. Bring-up firmware: Skeletal implementation testing clock -> GPIO -> PWM -> ADC -> ISR -> TZ -> SCI
+  - [ ] 1C. ISR Profiling: Measure execution time against 35 μs budget
+  - [ ] 1D. Hardware shutdown path: Time sensor -> comparator -> trip -> ePWM disable chain physically
+- [ ] **Gate 2: Final Electrical Design**
+  - [ ] 2A. Power architecture (Document worst-case metrics)
+  - [ ] 2B. Semiconductor review (Loss tables for all FETs)
+  - [ ] 2C. Gate-drive review (Isolators, bootstrap, resistors)
+  - [ ] 2D. Sensor design (Physical quantity to ADC scaling)
+  - [ ] 2E. Protection architecture (Centralized fault matrix)
+  - [ ] 2F. Magnetics (Inductance, peak current, flux density, window fill)
+- [ ] **Gate 3: PCB Design**
+  - [ ] Stackup & Net classes
+  - [ ] Route critical loops first (Switching nodes vs sensing)
+- [ ] **Gate 4: Pre-Fabrication Design Review**
+  - [ ] Formal checklist (ERC, DRC, footpints, orientation)
+  - [ ] Generate Fab package (Gerbers, BOM, etc.)
+  - [ ] **Design Review 1: Professor check**
+- [ ] **Gate 5: Board Bring-Up**
+  - [ ] 5A. Unpowered inspection (Resistance checks)
+  - [ ] 5B. Control power only (15V, 5V, 3.3V rails)
+  - [ ] 5C. PWM without power stage energy
+- [ ] **Gate 6: Progressive Power Testing**
+  - [ ] **Design Review 2: Professor check (Before meaningful power)**
+  - [ ] 6A. DC/DC First (Open loop to Closed loop to 500W)
+  - [ ] 6B. Inverter Standalone (Islanded voltage control into resistive load up to 500W)
+- [ ] **Gate 7: Physical Grid Interface**
+  - [ ] **Design Review 3: Professor check (Before grid-emulator connection)**
+  - [ ] 7A. PLL test (Lock and tracking)
+  - [ ] 7B. Breaker synchronization verification
+  - [ ] 7C. Grid-following current test (0W to 500W export)
+- [ ] **Gate 8: Microgrid Intelligence**
+  - [ ] State machine transitions (Grid-following -> Grid loss -> Grid-forming)
+- [ ] **Gate 9: Communications and Telemetry**
+  - [ ] RS-485 to Gateway integration
+  - [ ] 24-hour soak test monitoring
+- [ ] **Gate 10: Final Verification and Release**
+  - [ ] Compare simulation, firmware, and physical hardware behavior in one master table
+  - [ ] Final report and GitHub release

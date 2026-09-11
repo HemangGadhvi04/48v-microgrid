@@ -73,7 +73,9 @@ The portable Phase 2 firmware foundation is also executable on a host compiler:
 PI and P&O control, four-switch buck-boost control, SOGI-PLL, PR current control,
 and the protection supervisor pass their tests. See
 [`docs/PROJECT_EXECUTION_STATUS.md`](docs/PROJECT_EXECUTION_STATUS.md) for the
-current completion estimate and remaining execution gates.
+current completion estimate. Physical execution is controlled by the
+[`10-gate implementation plan`](docs/IMPLEMENTATION_PLAN_10_GATES.md) and its
+[`gate checklist`](docs/TASK_CHECKLIST_10_GATES.md).
 
 ---
 
@@ -108,6 +110,8 @@ current completion estimate and remaining execution gates.
 ├── .gitignore                    # Ignore rules for MATLAB, Python, KiCad
 ├── docs/                         # Technical documentation, derivations, and guides
 │   ├── ROADMAP_12_WEEKS.md       # Detailed 12-week Phase 1 simulation breakdown
+│   ├── IMPLEMENTATION_PLAN_10_GATES.md # Hardware-safe execution gates
+│   ├── TASK_CHECKLIST_10_GATES.md # Gate-by-gate completion checklist
 │   ├── phase1_simulation_report.md # Validated Phase 1 results and limits
 │   ├── phase2_hardware_specification.md # Isolated hardware-test requirements
 │   ├── design_notes_lc_filter.md # LC and LCL filter mathematical derivations

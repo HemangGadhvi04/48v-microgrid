@@ -13,7 +13,7 @@ from collections import defaultdict
 from kiutils.schematic import Schematic
 from kiutils.symbol import Symbol, SymbolPin
 from kiutils.items.syitems import SyRect
-from kiutils.items.schitems import (GlobalLabel, SchematicSymbol,
+from kiutils.items.schitems import (GlobalLabel, NoConnect, SchematicSymbol,
                                     SymbolProjectInstance, SymbolProjectPath)
 from kiutils.items.common import (Effects, Fill, Font, PageSettings, Position,
                                   Property, Stroke, TitleBlock)
@@ -118,9 +118,13 @@ def make_instance(schematic, reference, pins, value, x, y):
         pin_uuid = uid()
         symbol.pins[row["pin"]] = pin_uuid
         py = y + (index - (len(pins) - 1) / 2.0) * 2.54
-        schematic.globalLabels.append(GlobalLabel(
-            text=row["net"], shape="passive", position=Position(x - 12.70, py, 180),
-            effects=Effects(font=Font(width=1.0, height=1.0)), uuid=uid()))
+        if row["net"].startswith("NC_"):
+            schematic.noConnects.append(NoConnect(
+                position=Position(x - 12.70, py), uuid=uid()))
+        else:
+            schematic.globalLabels.append(GlobalLabel(
+                text=row["net"], shape="passive", position=Position(x - 12.70, py, 180),
+                effects=Effects(font=Font(width=1.0, height=1.0)), uuid=uid()))
     return symbol
 
 

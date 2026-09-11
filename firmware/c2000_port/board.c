@@ -32,7 +32,7 @@ static void configure_gpio(void)
     GPIO_setDirectionMode(MG_GPIO_BIAS_POWER_GOOD, GPIO_DIR_MODE_IN);
     GPIO_setQualificationMode(MG_GPIO_TRIP_LATCH_N, GPIO_QUAL_ASYNC);
     GPIO_setQualificationMode(MG_GPIO_ESTOP_N, GPIO_QUAL_ASYNC);
-    
+
     configure_output(MG_GPIO_PRECHARGE_RELAY);
     configure_output(MG_GPIO_MAIN_CONTACTOR);
     configure_output(MG_GPIO_GRID_BREAKER);
@@ -44,7 +44,9 @@ static void configure_gpio(void)
 void mg_f28379d_configure_peripherals(void)
 {
     SysCtl_disablePeripheral(SYSCTL_PERIPH_CLK_TBCLKSYNC);
-    
+    SysCtl_setEPWMClockDivider(SYSCTL_EPWMCLK_DIV_2); // Explicitly enforce 100MHz EPWMCLK from 200MHz SYSCLK
+
+
     configure_gpio();
     init_protection();
     init_epwm();
@@ -52,13 +54,13 @@ void mg_f28379d_configure_peripherals(void)
     init_communications();
     init_interrupts();
 
-    
+
     CPUTimer_stopTimer(CPUTIMER0_BASE);
     CPUTimer_setPreScaler(CPUTIMER0_BASE, 0u);
     CPUTimer_setPeriod(CPUTIMER0_BASE, UINT32_MAX);
     CPUTimer_reloadTimerCounter(CPUTIMER0_BASE);
     CPUTimer_startTimer(CPUTIMER0_BASE);
-    
+
     start_epwm();
     SysCtl_enablePeripheral(SYSCTL_PERIPH_CLK_TBCLKSYNC);
 }

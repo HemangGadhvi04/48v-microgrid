@@ -1,108 +1,107 @@
+#!/usr/bin/env python3
+"""Size magnetics conductors and screen winding/thermal feasibility."""
+
 import json
 import math
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 
-def calculate_thermal():
-    with (ROOT / "results" / "magnetics_metrics.json").open() as f:
-        metrics = json.load(f)
 
-    # Copper properties
-    rho_cu_100c = 2.3e-5  # Ohm*mm
-    
-    # E65/32/27 core geometry approximations
-    window_area_mm2 = 411.0 # 4.11 cm^2 Wa
-    center_leg_width_mm = 20.0
-    center_leg_depth_mm = 27.4 # Per core pair
-    
-    # Base surface area for 1 pair of E65 is ~140 cm^2. 
-    # Each additional core pair increases the depth by 27.4mm, adding ~50 cm^2 
-    base_surface_area_cm2 = 140.0
-    extra_surface_per_core_cm2 = 50.0
+def load_inputs():
+    return (
+        json.loads((ROOT / "magnetics_inputs.json").read_text()),
+        json.loads((ROOT / "results" / "magnetics_metrics.json").read_text()),
+    )
 
+
+def calculate(inputs, metrics):
+    rho_100c = 2.3e-5  # ohm mm2/mm
+    window_per_pair_mm2 = 411.0
+    packing_factor = 0.70
     strand_area_mm2 = metrics["preferred_strand_copper_area_mm2"]
-    
-    inductors_out = []
-    
-    for ind in metrics["inductors"]:
-        name = ind["name"]
-        core_count = ind["core_count"]
-        turns = ind["analysis_turns"]
-        strands = ind["minimum_parallel_strands"]
-        
-        # Calculate MLT (Mean Length of Turn)
-        # Center leg perimeter + winding build-out
-        mlt_mm = 2 * center_leg_width_mm + 2 * (center_leg_depth_mm * core_count) + 31.4 # pi * 10mm avg build
-        
-        # Calculate DCR
-        copper_area_mm2 = strands * strand_area_mm2
-        dcr_ohm = rho_cu_100c * (mlt_mm * turns) / copper_area_mm2
-        
-        # Copper Loss
-        i_rms = ind["rms_current_a"]
-        copper_loss_w = (i_rms ** 2) * dcr_ohm
-        
-        # Total Loss
-        core_loss_w = ind["predicted_core_loss_w"]
-        total_loss_w = copper_loss_w + core_loss_w
-        
-        # Window Fill Factor
-        # Area of copper / Window area
-        fill_factor = (turns * copper_area_mm2) / window_area_mm2
-        
-        # Temperature Rise (empirical formula: dT = (P_mw / Surface_Area_cm2)^0.833 )
-        surface_area_cm2 = base_surface_area_cm2 + (core_count - 1) * extra_surface_per_core_cm2
-        temp_rise_c = ( (total_loss_w * 1000.0) / surface_area_cm2 ) ** 0.833
-        
-        inductors_out.append({
-            "name": name,
-            "turns": turns,
-            "strands": strands,
-            "core_count": core_count,
-            "mlt_mm": mlt_mm,
-            "dcr_ohm": dcr_ohm,
-            "copper_loss_w": copper_loss_w,
-            "core_loss_w": core_loss_w,
-            "total_loss_w": total_loss_w,
-            "fill_factor": fill_factor,
-            "surface_area_cm2": surface_area_cm2,
-            "temp_rise_c": temp_rise_c
+    requirements = {row["name"]: row for row in inputs["inductors"]}
+    rows = []
+    for magnetic in metrics["inductors"]:
+        requirement = requirements[magnetic["name"]]
+        cores = magnetic["core_count"]
+        turns = magnetic["analysis_turns"]
+        mlt_mm = 2 * 20.0 + 2 * 27.4 * cores + 31.4
+        dcr_strands = math.ceil(
+            rho_100c * mlt_mm * turns
+            / (requirement["maximum_dcr_ohm"] * strand_area_mm2)
+        )
+        strands = max(magnetic["minimum_parallel_strands"], dcr_strands)
+        copper_area = strands * strand_area_mm2
+        dcr = rho_100c * mlt_mm * turns / copper_area
+        copper_loss = requirement["rms_current_a"] ** 2 * dcr
+        core_loss = magnetic["predicted_core_loss_w"]
+        total_loss = copper_loss + core_loss
+        fill = turns * copper_area / (window_per_pair_mm2 * cores * packing_factor)
+        surface_cm2 = 140.0 + (cores - 1) * 50.0
+        rise_c = ((total_loss * 1000.0) / surface_cm2) ** 0.833
+        passes = (
+            dcr <= requirement["maximum_dcr_ohm"]
+            and fill <= 0.40
+            and rise_c <= 40.0
+        )
+        rows.append({
+            "name": magnetic["name"], "core_count": cores, "turns": turns,
+            "minimum_strands_by_current_density": magnetic["minimum_parallel_strands"],
+            "minimum_strands_by_dcr": dcr_strands,
+            "selected_strands": strands, "mlt_mm": mlt_mm,
+            "dcr_ohm": dcr, "maximum_dcr_ohm": requirement["maximum_dcr_ohm"],
+            "copper_loss_w": copper_loss, "core_loss_w": core_loss,
+            "total_loss_w": total_loss, "effective_window_fill": fill,
+            "estimated_temperature_rise_c": rise_c, "passes_screen": passes,
         })
-        
-    # Write report
-    report_path = ROOT / "results" / "magnetics_thermal_report.md"
-    
-    report = "# Magnetics Thermal & Winding Proof\n\n"
-    report += "This report verifies the winding feasibility (window fill) and thermal limits (temperature rise) "
-    report += "for the E65 Kool Mu inductor designs at full 500W load.\n\n"
-    
-    report += "| Inductor | Cores | Turns | Strands | MLT (mm) | DCR (mΩ) | Cu Loss (W) | Core Loss (W) | Total (W) | Fill Factor | $\Delta$T (°C) |\n"
-    report += "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|\n"
-    
-    all_feasible = True
-    for out in inductors_out:
-        report += f"| {out['name']} | {out['core_count']} | {out['turns']} | {out['strands']} | "
-        report += f"{out['mlt_mm']:.1f} | {out['dcr_ohm']*1000:.2f} | "
-        report += f"{out['copper_loss_w']:.2f} | {out['core_loss_w']:.2f} | {out['total_loss_w']:.2f} | "
-        report += f"{out['fill_factor']*100:.1f}% | {out['temp_rise_c']:.1f} |\n"
-        
-        if out['fill_factor'] > 0.4: # Typical limit for round wire
-            all_feasible = False
-        if out['temp_rise_c'] > 40.0:
-            all_feasible = False
-            
-    report += "\n## Feasibility Assessment\n\n"
-    
-    if all_feasible:
-        report += "✅ **PASSED**: All inductors have a window fill factor below 40% and a predicted temperature rise below 40°C.\n"
+    return {
+        "assumptions": {
+            "copper_resistivity_at_100c_ohm_mm2_per_mm": rho_100c,
+            "window_area_per_core_pair_mm2": window_per_pair_mm2,
+            "winding_packing_factor": packing_factor,
+        },
+        "inductors": rows,
+        "all_pass_screen": all(row["passes_screen"] for row in rows),
+    }
+
+
+def write_outputs(result):
+    results_dir = ROOT / "results"
+    (results_dir / "magnetics_thermal_metrics.json").write_text(
+        json.dumps(result, indent=2) + "\n"
+    )
+    lines = [
+        "# Magnetics Winding and Thermal Screen", "",
+        "This analytical screen sizes conductor count from both current-density and DCR requirements. "
+        "The stacked-core window scales with stack count and a 70% round-wire packing factor is applied. "
+        "Release still requires the exact bobbin drawing, a wound sample, measured DCR, loaded inductance, and a thermal test.",
+        "",
+        "| Inductor | Cores | Turns | Strands (current / DCR / selected) | Est. DCR / limit | Effective fill | Est. loss | Est. rise | Screen |",
+        "|---|---:|---:|---:|---:|---:|---:|---:|---|",
+    ]
+    for row in result["inductors"]:
+        lines.append(
+            f"| {row['name']} | {row['core_count']} | {row['turns']} | "
+            f"{row['minimum_strands_by_current_density']} / {row['minimum_strands_by_dcr']} / {row['selected_strands']} | "
+            f"{row['dcr_ohm']*1000:.2f} / {row['maximum_dcr_ohm']*1000:.2f} mOhm | "
+            f"{row['effective_window_fill']*100:.1f}% | {row['total_loss_w']:.2f} W | "
+            f"{row['estimated_temperature_rise_c']:.1f} C | {'PASS' if row['passes_screen'] else 'FAIL'} |"
+        )
+    lines.extend(["", "## Result", ""])
+    if result["all_pass_screen"]:
+        lines.append("**PRELIMINARY PASS:** the revised conductor counts satisfy the analytical DCR, effective-fill, and temperature-rise screens.")
     else:
-        report += "❌ **WARNING**: One or more inductors exceed the 40% window fill limit or 40°C temperature rise target.\n"
-        
-    with report_path.open("w") as f:
-        f.write(report)
-        
-    print(f"Generated {report_path}")
+        lines.append("**FAIL:** revise the conductor or core geometry before winding release.")
+    (results_dir / "magnetics_thermal_report.md").write_text("\n".join(lines) + "\n")
+
+
+def main():
+    inputs, metrics = load_inputs()
+    result = calculate(inputs, metrics)
+    write_outputs(result)
+    print("Magnetics winding screen: " + ("PASS" if result["all_pass_screen"] else "FAIL"))
+
 
 if __name__ == "__main__":
-    calculate_thermal()
+    main()

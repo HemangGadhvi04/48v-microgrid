@@ -27,14 +27,23 @@ void init_adc(void)
     configure_adc_module(ADCB_BASE);
     configure_adc_module(ADCC_BASE);
     DEVICE_DELAY_US(1000u);
+
     setup_soc(ADCA_BASE, ADC_SOC_NUMBER0, ADC_CH_ADCIN14);
     setup_soc(ADCA_BASE, ADC_SOC_NUMBER1, ADC_CH_ADCIN3);
     setup_soc(ADCA_BASE, ADC_SOC_NUMBER2, ADC_CH_ADCIN2);
     setup_soc(ADCA_BASE, ADC_SOC_NUMBER3, ADC_CH_ADCIN0);
+
     setup_soc(ADCB_BASE, ADC_SOC_NUMBER0, ADC_CH_ADCIN3);
     setup_soc(ADCB_BASE, ADC_SOC_NUMBER1, ADC_CH_ADCIN2);
+
     setup_soc(ADCC_BASE, ADC_SOC_NUMBER0, ADC_CH_ADCIN3);
     setup_soc(ADCC_BASE, ADC_SOC_NUMBER1, ADC_CH_ADCIN2);
+
+    // Explicitly configure SOC priority for deterministic execution order
+    ADC_setSOCPriority(ADCA_BASE, ADC_PRI_THRU_SOC3_HIPRI);
+    ADC_setSOCPriority(ADCB_BASE, ADC_PRI_THRU_SOC1_HIPRI);
+    ADC_setSOCPriority(ADCC_BASE, ADC_PRI_THRU_SOC1_HIPRI);
+
     ADC_setInterruptSource(ADCA_BASE, ADC_INT_NUMBER1, ADC_SOC_NUMBER3);
     ADC_clearInterruptStatus(ADCA_BASE, ADC_INT_NUMBER1);
     ADC_enableInterrupt(ADCA_BASE, ADC_INT_NUMBER1);
