@@ -3,8 +3,8 @@
 - Upstream: `TexasInstruments/c2000ware-core-sdk`
 - Revision: `e5698c666d9ff587940d249213cbbb328a3bcd66`
 - Device headers: `driverlib/f2837xd/driverlib`
-- Target calls checked: 66
-- Target constants checked: 59
+- Target calls checked: 69
+- Target constants checked: 65
 - Missing symbols: 0
 
 This is a header-level compatibility check. A TI C28x compiler build and a

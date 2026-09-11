@@ -10,14 +10,18 @@ args = parser.parse_args()
 driverlib = args.sdk / "driverlib" / "f2837xd" / "driverlib"
 assert driverlib.is_dir(), driverlib
 headers = "\n".join(path.read_text(errors="ignore") for path in driverlib.rglob("*.h"))
-target_dir = Path(__file__).resolve().parent / "target"
-source = "\n".join(path.read_text() for path in target_dir.glob("*.[ch]"))
+port_dir = Path(__file__).resolve().parent
+target_sources = [
+    "f28379d_driverlib_hal.c", "board.c", "adc.c", "pwm.c",
+    "protection.c", "communications.c", "interrupts.c", "main_cpu1.c",
+]
+source = "\n".join((port_dir / name).read_text() for name in target_sources)
 calls = set(re.findall(r"\b((?:ADC|EPWM|GPIO|XBAR|SCI|SysCtl|CPUTimer|Interrupt)_[A-Za-z0-9_]+)\s*\(", source))
 constants = set(re.findall(r"\b(?:ADC|EPWM|GPIO|XBAR|SCI|SYSCTL|CPUTIMER|INTERRUPT)_[A-Z0-9_]+\b", source))
 missing = sorted(symbol for symbol in calls | constants if symbol not in headers)
 assert not missing, f"symbols missing from F2837xD Driverlib: {missing}"
 revision = subprocess.check_output(["git", "-C", str(args.sdk), "rev-parse", "HEAD"], text=True).strip()
-report = target_dir.parent / "driverlib_validation_report.md"
+report = port_dir / "driverlib_validation_report.md"
 report.write_text(f"""# Driverlib API Validation
 
 - Upstream: `TexasInstruments/c2000ware-core-sdk`

@@ -14,7 +14,7 @@ target build and LaunchPad measurements are complete.
 | **6** | Deterministic PWM / DB Timing | **SOURCE COMPLETE / TARGET PENDING** | The source explicitly requests a 100 MHz ePWM clock, divide-by-one TBCLK and full-cycle dead-band clock. The intended result is 20 kHz PWM and 100 ns dead time; confirm the APIs and waveform on the target. |
 | **7** | CPU1 startup sequence | **PASS** | `main_cpu1.c` forces strict order: `Device_init` → `Device_initGPIO` → `Interrupt_initModule` → `Interrupt_initVectorTable` → Peripherals (ADC/PWM/TZ/SCI) → `EINT` → `ERTM`. |
 | **8** | Verify CMake configuration | **PASS** | `CMakeLists.txt` configures `2837xD_FLASH_lnk_cpu1.cmd`, links `driverlib.lib`, targets `ti-cgt-c2000` via `toolchain-tic2000.cmake`, and defines `MG_C2000_TARGET`. |
-| **9** | Run host tests | **PASS** | `make test` executed; API verifier, pin allocation, and peripheral timing tests pass. |
+| **9** | Run host tests and upstream header audit | **PASS** | `make test` passes. A pinned C2000Ware 26.01.00.00 checkout was also scanned: all 69 Driverlib calls and 65 constants used by the target modules exist in the F2837xD headers. |
 | **10** | TI CGT compile/link | **BLOCKED** | TI Code Generation Tools are unavailable in this environment. Must be run locally by user via CCS. |
 
 ### Conclusion
