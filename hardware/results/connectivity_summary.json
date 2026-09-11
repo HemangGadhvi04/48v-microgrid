@@ -6,6 +6,6 @@
   "mosfet_gate_chains": 8,
   "hardware_interlock_channels": 8,
   "relay_drivers": 3,
-  "bom_line_items": 32,
+  "bom_line_items": 35,
   "checks_passed": true
 }
