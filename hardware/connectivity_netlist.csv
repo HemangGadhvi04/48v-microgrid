@@ -65,20 +65,8 @@ KAC,COM,AC_PCC,AC,Microgrid side of AC breaker
 KAC,NO,UTILITY_AC,AC,Utility emulator side of AC breaker
 JAC,1,UTILITY_AC,AC,Isolated grid emulator line
 JAC,2,AC_RETURN,AC,Isolated grid emulator return
-U9,IN+,PV_SENSED+,ANALOG,PV voltage front end
-U9,IN-,PGND,ANALOG,PV voltage reference
-U9,OUT,ADC_PV_V,ANALOG,PV voltage measurement
-U10,IN+,DC48+,ANALOG,DC bus voltage front end
-U10,IN-,PGND,ANALOG,DC bus voltage reference
-U10,OUT,ADC_VDC,ANALOG,DC bus voltage measurement
-U11,IN+,AC_INV,ANALOG,Microgrid bus voltage front end
-U11,IN-,AC_RETURN,ANALOG,Microgrid bus reference
-U11,OUT,ADC_GRID_V,ANALOG,Microgrid voltage measurement
-U12,IN+,UTILITY_AC,ANALOG,Utility-side voltage front end
-U12,IN-,AC_RETURN,ANALOG,Utility voltage reference
-U12,OUT,ADC_UTILITY_V,ANALOG,Utility voltage measurement
 U13,SENSE,HEATSINK,THERMAL,Heatsink temperature sensor
-U13,OUT,ADC_TEMP,ANALOG,Temperature measurement
+U13,OUT,TEMP_RAW,ANALOG,Temperature measurement
 UTRIP,IN1_N,OC_PV_N,SAFETY,PV overcurrent input
 UTRIP,IN2_N,OC_DC_N,SAFETY,DC overcurrent input
 UTRIP,IN3_N,OC_GRID_N,SAFETY,Grid overcurrent input
@@ -253,16 +241,8 @@ U7,VS,3V3_A,ANALOG,U7 current sensor 3.3 V supply
 U7,GND,AGND,ANALOG,U7 current sensor ground
 U8,VS,3V3_A,ANALOG,U8 current sensor 3.3 V supply
 U8,GND,AGND,ANALOG,U8 current sensor ground
-U9,VCC,5V_ISO,ANALOG,PV voltage front-end supply
-U9,GND,DGND,ANALOG,PV voltage front-end ground
-U10,VCC,5V_ISO,ANALOG,DC voltage front-end supply
-U10,GND,DGND,ANALOG,DC voltage front-end ground
-U11,VCC,5V_ISO,ANALOG,Bus voltage front-end supply
-U11,GND,DGND,ANALOG,Bus voltage front-end ground
-U12,VCC,5V_ISO,ANALOG,Utility voltage front-end supply
-U12,GND,DGND,ANALOG,Utility voltage front-end ground
-U13,VCC,3V3,DIGITAL,Temperature sensor supply
-U13,GND,DGND,DIGITAL,Temperature sensor ground
+U13,VS,3V3_A,ANALOG,TMP235 supply
+U13,GND,AGND,ANALOG,TMP235 ground
 JBIAS,1,GD12V,GATE,Gate-driver bias input
 JBIAS,2,5V_ISO,ANALOG,Sensor supply input
 JBIAS,3,3V3,DIGITAL,Digital supply
@@ -333,3 +313,191 @@ CVS8,2,AGND,ANALOG,Supply bypass return
 CBULK8,1,3V3_A,ANALOG,10 uF local supply bulk capacitor
 CBULK8,2,AGND,ANALOG,Supply bulk return
 UTRIP,DIAG_N,SENSOR_ALERT_N,SAFETY,Current-sensor diagnostic input
+UREF,IN+,VREF105_RAW,ANALOG,105 mV reference buffer
+UREF,IN-,VREF105,ANALOG,105 mV reference buffer
+UREF,OUT,VREF105,ANALOG,105 mV reference buffer
+UREF,VS,3V3_A,ANALOG,105 mV reference buffer
+UREF,GND,AGND,ANALOG,105 mV reference buffer
+RREFH,1,3V3_A,ANALOG,30.4 kohm live-zero divider upper
+RREFH,2,VREF105_RAW,ANALOG,30.4 kohm live-zero divider upper
+RREFL,1,VREF105_RAW,ANALOG,1.00 kohm live-zero divider lower
+RREFL,2,AGND,ANALOG,1.00 kohm live-zero divider lower
+CREF,1,VREF105_RAW,ANALOG,100 nF live-zero filter
+CREF,2,AGND,ANALOG,100 nF live-zero filter
+CUREF,1,3V3_A,ANALOG,100 nF UREF bypass
+CUREF,2,AGND,ANALOG,100 nF UREF bypass
+UREF2,IN+,VREF165_RAW,ANALOG,1.65 V center-reference buffer
+UREF2,IN-,VREF165,ANALOG,1.65 V center-reference buffer
+UREF2,OUT,VREF165,ANALOG,1.65 V center-reference buffer
+UREF2,VS,3V3_A,ANALOG,1.65 V center-reference buffer
+UREF2,GND,AGND,ANALOG,1.65 V center-reference buffer
+R165H,1,3V3_A,ANALOG,10.0 kohm center-reference upper
+R165H,2,VREF165_RAW,ANALOG,10.0 kohm center-reference upper
+R165L,1,VREF165_RAW,ANALOG,10.0 kohm center-reference lower
+R165L,2,AGND,ANALOG,10.0 kohm center-reference lower
+C165,1,VREF165_RAW,ANALOG,100 nF center-reference filter
+C165,2,AGND,ANALOG,100 nF center-reference filter
+CUREF2,1,3V3_A,ANALOG,100 nF UREF2 bypass
+CUREF2,2,AGND,ANALOG,100 nF UREF2 bypass
+U9,IN+,PV_DIV,ANALOG,PV voltage buffer
+U9,IN-,PV_BUF,ANALOG,PV voltage buffer
+U9,OUT,PV_BUF,ANALOG,PV voltage buffer
+U9,VS,3V3_A,ANALOG,PV voltage buffer
+U9,GND,AGND,ANALOG,PV voltage buffer
+RPVH1,1,PV_SENSED+,ANALOG,100 kohm divider upper 1
+RPVH1,2,PV_DIV_MID,ANALOG,100 kohm divider upper 1
+RPVH2,1,PV_DIV_MID,ANALOG,100 kohm divider upper 2
+RPVH2,2,PV_DIV,ANALOG,100 kohm divider upper 2
+RPVL,1,PV_DIV,ANALOG,10.0 kohm divider lower
+RPVL,2,VREF105,ANALOG,10.0 kohm divider lower
+RFPV,1,PV_BUF,ANALOG,1.00 kohm ADC isolation resistor
+RFPV,2,ADC_PV_V,ANALOG,1.00 kohm ADC isolation resistor
+CFPV,1,ADC_PV_V,ANALOG,4.7 nF ADC charge-bucket capacitor
+CFPV,2,AGND,ANALOG,4.7 nF ADC charge-bucket capacitor
+CU9,1,3V3_A,ANALOG,100 nF local bypass
+CU9,2,AGND,ANALOG,100 nF local bypass
+U10,IN+,DC_DIV,ANALOG,DC voltage buffer
+U10,IN-,DC_BUF,ANALOG,DC voltage buffer
+U10,OUT,DC_BUF,ANALOG,DC voltage buffer
+U10,VS,3V3_A,ANALOG,DC voltage buffer
+U10,GND,AGND,ANALOG,DC voltage buffer
+RDCH1,1,DC48+,ANALOG,100 kohm divider upper 1
+RDCH1,2,DC_DIV_MID,ANALOG,100 kohm divider upper 1
+RDCH2,1,DC_DIV_MID,ANALOG,100 kohm divider upper 2
+RDCH2,2,DC_DIV,ANALOG,100 kohm divider upper 2
+RDCL,1,DC_DIV,ANALOG,10.0 kohm divider lower
+RDCL,2,VREF105,ANALOG,10.0 kohm divider lower
+RFDC,1,DC_BUF,ANALOG,1.00 kohm ADC isolation resistor
+RFDC,2,ADC_VDC,ANALOG,1.00 kohm ADC isolation resistor
+CFDC,1,ADC_VDC,ANALOG,4.7 nF ADC charge-bucket capacitor
+CFDC,2,AGND,ANALOG,4.7 nF ADC charge-bucket capacitor
+CU10,1,3V3_A,ANALOG,100 nF local bypass
+CU10,2,AGND,ANALOG,100 nF local bypass
+U11,DCDC_OUT,U11_DCDC_HI,ANALOG,AMC3330 isolated voltage amplifier
+U11,DCDC_HGND,AC_RETURN,ANALOG,AMC3330 isolated voltage amplifier
+U11,HLDO_IN,U11_DCDC_HI,ANALOG,AMC3330 isolated voltage amplifier
+U11,NC,NC_U11,ANALOG,AMC3330 isolated voltage amplifier
+U11,HLDO_OUT,U11_HLDO,ANALOG,AMC3330 isolated voltage amplifier
+U11,INP,U11_VSENSE,ANALOG,AMC3330 isolated voltage amplifier
+U11,INN,AC_RETURN,ANALOG,AMC3330 isolated voltage amplifier
+U11,HGND,AC_RETURN,ANALOG,AMC3330 isolated voltage amplifier
+U11,GND,AGND,ANALOG,AMC3330 isolated voltage amplifier
+U11,OUTN,U11_OUTN,ANALOG,AMC3330 isolated voltage amplifier
+U11,OUTP,U11_OUTP,ANALOG,AMC3330 isolated voltage amplifier
+U11,VDD,3V3_A,ANALOG,AMC3330 isolated voltage amplifier
+U11,LDO_OUT,U11_DCDC_LO,ANALOG,AMC3330 isolated voltage amplifier
+U11,DIAG,AFE_DIAG_N,ANALOG,AMC3330 isolated voltage amplifier
+U11,DCDC_GND,AGND,ANALOG,AMC3330 isolated voltage amplifier
+U11,DCDC_IN,U11_DCDC_LO,ANALOG,AMC3330 isolated voltage amplifier
+RU11H1,1,AC_INV,ANALOG,249 kohm isolation divider upper 1
+RU11H1,2,U11_DIV_MID,ANALOG,249 kohm isolation divider upper 1
+RU11H2,1,U11_DIV_MID,ANALOG,249 kohm isolation divider upper 2
+RU11H2,2,U11_VSENSE,ANALOG,249 kohm isolation divider upper 2
+RU11L,1,U11_VSENSE,ANALOG,10.0 kohm isolation divider shunt
+RU11L,2,AC_RETURN,ANALOG,10.0 kohm isolation divider shunt
+CU11IN,1,U11_VSENSE,ANALOG,1 nF isolated input filter
+CU11IN,2,AC_RETURN,ANALOG,1 nF isolated input filter
+CU11VDD1N,1,3V3_A,ANALOG,1 nF AMC3330 bypass
+CU11VDD1N,2,AGND,ANALOG,1 nF AMC3330 bypass
+CU11VDD1U,1,3V3_A,ANALOG,1 uF AMC3330 bypass
+CU11VDD1U,2,AGND,ANALOG,1 uF AMC3330 bypass
+CU11DCL,1,U11_DCDC_LO,ANALOG,100 nF AMC3330 bypass
+CU11DCL,2,AGND,ANALOG,100 nF AMC3330 bypass
+CU11DCH1N,1,U11_DCDC_HI,ANALOG,1 nF AMC3330 bypass
+CU11DCH1N,2,AC_RETURN,ANALOG,1 nF AMC3330 bypass
+CU11DCH1U,1,U11_DCDC_HI,ANALOG,1 uF AMC3330 bypass
+CU11DCH1U,2,AC_RETURN,ANALOG,1 uF AMC3330 bypass
+CU11HLO1N,1,U11_HLDO,ANALOG,1 nF AMC3330 bypass
+CU11HLO1N,2,AC_RETURN,ANALOG,1 nF AMC3330 bypass
+CU11HLO100N,1,U11_HLDO,ANALOG,100 nF AMC3330 bypass
+CU11HLO100N,2,AC_RETURN,ANALOG,100 nF AMC3330 bypass
+U14,IN+,U14_NP,ANALOG,AMC3330 ADC driver
+U14,IN-,U14_NN,ANALOG,AMC3330 ADC driver
+U14,OUT,U14_OUT,ANALOG,AMC3330 ADC driver
+U14,VS,3V3_A,ANALOG,AMC3330 ADC driver
+U14,GND,AGND,ANALOG,AMC3330 ADC driver
+RU14INN,1,U11_OUTN,ANALOG,20.0 kohm difference input
+RU14INN,2,U14_NN,ANALOG,20.0 kohm difference input
+RU14FB,1,U14_OUT,ANALOG,15.0 kohm feedback
+RU14FB,2,U14_NN,ANALOG,15.0 kohm feedback
+RU14INP,1,U11_OUTP,ANALOG,20.0 kohm difference input
+RU14INP,2,U14_NP,ANALOG,20.0 kohm difference input
+RU14REF,1,VREF165,ANALOG,15.0 kohm reference leg
+RU14REF,2,U14_NP,ANALOG,15.0 kohm reference leg
+RFU14,1,U14_OUT,ANALOG,1.00 kohm ADC isolation resistor
+RFU14,2,ADC_GRID_V,ANALOG,1.00 kohm ADC isolation resistor
+CFU14,1,ADC_GRID_V,ANALOG,4.7 nF ADC charge-bucket capacitor
+CFU14,2,AGND,ANALOG,4.7 nF ADC charge-bucket capacitor
+CU14,1,3V3_A,ANALOG,100 nF local bypass
+CU14,2,AGND,ANALOG,100 nF local bypass
+U12,DCDC_OUT,U12_DCDC_HI,ANALOG,AMC3330 isolated voltage amplifier
+U12,DCDC_HGND,AC_RETURN,ANALOG,AMC3330 isolated voltage amplifier
+U12,HLDO_IN,U12_DCDC_HI,ANALOG,AMC3330 isolated voltage amplifier
+U12,NC,NC_U12,ANALOG,AMC3330 isolated voltage amplifier
+U12,HLDO_OUT,U12_HLDO,ANALOG,AMC3330 isolated voltage amplifier
+U12,INP,U12_VSENSE,ANALOG,AMC3330 isolated voltage amplifier
+U12,INN,AC_RETURN,ANALOG,AMC3330 isolated voltage amplifier
+U12,HGND,AC_RETURN,ANALOG,AMC3330 isolated voltage amplifier
+U12,GND,AGND,ANALOG,AMC3330 isolated voltage amplifier
+U12,OUTN,U12_OUTN,ANALOG,AMC3330 isolated voltage amplifier
+U12,OUTP,U12_OUTP,ANALOG,AMC3330 isolated voltage amplifier
+U12,VDD,3V3_A,ANALOG,AMC3330 isolated voltage amplifier
+U12,LDO_OUT,U12_DCDC_LO,ANALOG,AMC3330 isolated voltage amplifier
+U12,DIAG,AFE_DIAG_N,ANALOG,AMC3330 isolated voltage amplifier
+U12,DCDC_GND,AGND,ANALOG,AMC3330 isolated voltage amplifier
+U12,DCDC_IN,U12_DCDC_LO,ANALOG,AMC3330 isolated voltage amplifier
+RU12H1,1,UTILITY_AC,ANALOG,249 kohm isolation divider upper 1
+RU12H1,2,U12_DIV_MID,ANALOG,249 kohm isolation divider upper 1
+RU12H2,1,U12_DIV_MID,ANALOG,249 kohm isolation divider upper 2
+RU12H2,2,U12_VSENSE,ANALOG,249 kohm isolation divider upper 2
+RU12L,1,U12_VSENSE,ANALOG,10.0 kohm isolation divider shunt
+RU12L,2,AC_RETURN,ANALOG,10.0 kohm isolation divider shunt
+CU12IN,1,U12_VSENSE,ANALOG,1 nF isolated input filter
+CU12IN,2,AC_RETURN,ANALOG,1 nF isolated input filter
+CU12VDD1N,1,3V3_A,ANALOG,1 nF AMC3330 bypass
+CU12VDD1N,2,AGND,ANALOG,1 nF AMC3330 bypass
+CU12VDD1U,1,3V3_A,ANALOG,1 uF AMC3330 bypass
+CU12VDD1U,2,AGND,ANALOG,1 uF AMC3330 bypass
+CU12DCL,1,U12_DCDC_LO,ANALOG,100 nF AMC3330 bypass
+CU12DCL,2,AGND,ANALOG,100 nF AMC3330 bypass
+CU12DCH1N,1,U12_DCDC_HI,ANALOG,1 nF AMC3330 bypass
+CU12DCH1N,2,AC_RETURN,ANALOG,1 nF AMC3330 bypass
+CU12DCH1U,1,U12_DCDC_HI,ANALOG,1 uF AMC3330 bypass
+CU12DCH1U,2,AC_RETURN,ANALOG,1 uF AMC3330 bypass
+CU12HLO1N,1,U12_HLDO,ANALOG,1 nF AMC3330 bypass
+CU12HLO1N,2,AC_RETURN,ANALOG,1 nF AMC3330 bypass
+CU12HLO100N,1,U12_HLDO,ANALOG,100 nF AMC3330 bypass
+CU12HLO100N,2,AC_RETURN,ANALOG,100 nF AMC3330 bypass
+U15,IN+,U15_NP,ANALOG,AMC3330 ADC driver
+U15,IN-,U15_NN,ANALOG,AMC3330 ADC driver
+U15,OUT,U15_OUT,ANALOG,AMC3330 ADC driver
+U15,VS,3V3_A,ANALOG,AMC3330 ADC driver
+U15,GND,AGND,ANALOG,AMC3330 ADC driver
+RU15INN,1,U12_OUTN,ANALOG,20.0 kohm difference input
+RU15INN,2,U15_NN,ANALOG,20.0 kohm difference input
+RU15FB,1,U15_OUT,ANALOG,15.0 kohm feedback
+RU15FB,2,U15_NN,ANALOG,15.0 kohm feedback
+RU15INP,1,U12_OUTP,ANALOG,20.0 kohm difference input
+RU15INP,2,U15_NP,ANALOG,20.0 kohm difference input
+RU15REF,1,VREF165,ANALOG,15.0 kohm reference leg
+RU15REF,2,U15_NP,ANALOG,15.0 kohm reference leg
+RFU15,1,U15_OUT,ANALOG,1.00 kohm ADC isolation resistor
+RFU15,2,ADC_UTILITY_V,ANALOG,1.00 kohm ADC isolation resistor
+CFU15,1,ADC_UTILITY_V,ANALOG,4.7 nF ADC charge-bucket capacitor
+CFU15,2,AGND,ANALOG,4.7 nF ADC charge-bucket capacitor
+CU15,1,3V3_A,ANALOG,100 nF local bypass
+CU15,2,AGND,ANALOG,100 nF local bypass
+UTRIP,AFE_DIAG_N,AFE_DIAG_N,SAFETY,Analog front-end diagnostic trip input
+RFTEMP,1,TEMP_RAW,ANALOG,1.00 kohm ADC isolation resistor
+RFTEMP,2,ADC_TEMP,ANALOG,1.00 kohm ADC isolation resistor
+CFTEMP,1,ADC_TEMP,ANALOG,4.7 nF ADC charge-bucket capacitor
+CFTEMP,2,AGND,ANALOG,4.7 nF ADC charge-bucket capacitor
+CU13,1,3V3_A,ANALOG,100 nF TMP235 bypass
+CU13,2,AGND,ANALOG,100 nF TMP235 bypass
+URS485,VCC_ISO,5V_ISO,COMMS,Isolated bus-side supply
+FBA,1,3V3,ANALOG,Analog rail ferrite input
+FBA,2,3V3_A,ANALOG,Filtered analog 3.3 V rail
+NTAGND,1,DGND,ANALOG,Analog/digital ground net tie
+NTAGND,2,AGND,ANALOG,Analog/digital ground net tie
+CISO1410,1,5V_ISO,COMMS,100 nF isolated RS-485 bypass
+CISO1410,2,COM_GND_ISO,COMMS,Isolated RS-485 bypass return

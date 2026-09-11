@@ -1,7 +1,7 @@
 {
-  "component_count": 90,
-  "pin_count": 334,
-  "net_count": 98,
+  "component_count": 156,
+  "pin_count": 502,
+  "net_count": 132,
   "adc_channels": 8,
   "mosfet_gate_chains": 8,
   "hardware_interlock_channels": 8,

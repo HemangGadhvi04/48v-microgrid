@@ -30,8 +30,37 @@ adc_nets = {
 assert adc_nets <= by_net.keys()
 for net in adc_nets:
     assert any(ref == "JCTRL" for ref, _ in by_net[net]), net
-assert by_ref["U11"]["IN+"] == "AC_INV"
-assert by_ref["U12"]["IN+"] == "UTILITY_AC"
+for isolator, source, driver, adc in (
+    ("U11", "AC_INV", "U14", "ADC_GRID_V"),
+    ("U12", "UTILITY_AC", "U15", "ADC_UTILITY_V"),
+):
+    assert by_ref[isolator]["INP"] == f"{isolator}_VSENSE"
+    assert by_ref[isolator]["INN"] == "AC_RETURN"
+    assert by_ref[isolator]["HGND"] == "AC_RETURN"
+    assert by_ref[isolator]["DCDC_HGND"] == "AC_RETURN"
+    assert by_ref[isolator]["DCDC_GND"] == "AGND"
+    assert by_ref[isolator]["GND"] == "AGND"
+    assert by_ref[isolator]["DCDC_OUT"] == by_ref[isolator]["HLDO_IN"]
+    assert by_ref[isolator]["LDO_OUT"] == by_ref[isolator]["DCDC_IN"]
+    assert by_ref[isolator]["DIAG"] == "AFE_DIAG_N"
+    assert by_ref[f"R{isolator}H1"]["1"] == source
+    assert by_ref[f"R{isolator}H2"]["2"] == f"{isolator}_VSENSE"
+    assert by_ref[f"R{isolator}L"] == {"1": f"{isolator}_VSENSE", "2": "AC_RETURN"}
+    assert by_ref[f"RF{driver}"]["2"] == adc
+    assert by_ref[f"CF{driver}"] == {"1": adc, "2": "AGND"}
+
+for buffer, source, prefix, adc in (
+    ("U9", "PV_SENSED+", "PV", "ADC_PV_V"),
+    ("U10", "DC48+", "DC", "ADC_VDC"),
+):
+    assert by_ref[buffer] == {
+        "IN+": f"{prefix}_DIV", "IN-": f"{prefix}_BUF",
+        "OUT": f"{prefix}_BUF", "VS": "3V3_A", "GND": "AGND",
+    }
+    assert by_ref[f"R{prefix}H1"]["1"] == source
+    assert by_ref[f"R{prefix}L"]["2"] == "VREF105"
+    assert by_ref[f"RF{prefix}"]["2"] == adc
+    assert by_ref[f"CF{prefix}"] == {"1": adc, "2": "AGND"}
 assert by_ref["KAC"]["COM"] == "AC_PCC"
 assert by_ref["KAC"]["NO"] == "UTILITY_AC"
 assert not any(ref != "KAC" and {row["net"] for row in rows if row["reference"] == ref}
