@@ -45,6 +45,11 @@ assert schematic.count("(no_connect ") == sum(
 assert len(re.findall(r'^\s+\(pin "[^"]+" \(uuid ', schematic, re.MULTILINE)) == len(rows)
 assert "DB1" not in schematic and "DB2" not in schematic
 assert schematic.count('(lib_id "MG:') == len(references)
+assert "(pin open_collector line" in schematic
+assert "(pin power_in line" in schematic
+assert "(pin bidirectional line" in schematic
+assert "(pin input line" in schematic
+assert "(pin output line" in schematic
 
 print(f"Verified KiCad schematic: {len(references)} symbols, {len(rows)} pins, "
       f"{len(expected_nets)} nets")

@@ -73,6 +73,55 @@ def candidate(reference, description):
     return description[:48]
 
 
+def pin_type(reference, pin):
+    """Map functional pins to KiCad ERC electrical types."""
+    if re.fullmatch(r"U[1-4]", reference):
+        if pin in {"HI", "LI"}:
+            return "input"
+        if pin in {"HO", "LO"}:
+            return "output"
+        if pin in {"VDD", "VSS", "HB", "HS"}:
+            return "power_in"
+    if reference in {"U6", "U7", "U8"}:
+        return {
+            "VOUT": "output", "VREF": "output", "OC": "open_collector",
+            "ALERT": "open_collector", "VOC": "input", "VS": "power_in",
+            "GND": "power_in", "NC": "no_connect",
+        }.get(pin, "passive")
+    if reference in {"U9", "U10", "U14", "U15", "UREF", "UREF2"}:
+        return {
+            "IN+": "input", "IN-": "input", "OUT": "output",
+            "VS": "power_in", "GND": "power_in",
+        }.get(pin, "passive")
+    if reference in {"U11", "U12"}:
+        if pin in {"INP", "INN"}:
+            return "input"
+        if pin in {"OUTP", "OUTN", "DCDC_OUT", "HLDO_OUT", "LDO_OUT"}:
+            return "output"
+        if pin == "DIAG":
+            return "open_collector"
+        if pin == "NC":
+            return "no_connect"
+        return "power_in"
+    if reference == "U13":
+        return {"OUT": "output", "VS": "power_in", "GND": "power_in"}.get(pin, "passive")
+    if reference.startswith("UEN"):
+        return "output" if pin == "OUT" else "input"
+    if reference == "UTRIP":
+        return "output" if pin == "OUT_N" else "input"
+    if reference == "UBIAS":
+        return "open_collector" if pin in {"OUT", "OUT_N", "PGOOD"} else "input"
+    if reference == "URS485":
+        if pin in {"DI", "DE"}:
+            return "input"
+        if pin == "RO":
+            return "output"
+        if pin in {"VCC", "VCC_ISO", "GND", "GND_ISO"}:
+            return "power_in"
+        return "bidirectional"
+    return "passive"
+
+
 def make_lib_symbol(reference, pins, value):
     lib = Symbol.create_new(f"MG:{reference}", reference.rstrip("0123456789") or "U", value)
     lib.pinNames = True
@@ -87,7 +136,7 @@ def make_lib_symbol(reference, pins, value):
     for index, row in enumerate(pins):
         y = (index - (len(pins) - 1) / 2.0) * 2.54
         unit.pins.append(SymbolPin(
-            electricalType="passive", graphicalStyle="line",
+            electricalType=pin_type(reference, row["pin"]), graphicalStyle="line",
             position=Position(-12.70, y, 0), length=2.54,
             name=row["pin"], number=row["pin"],
             nameEffects=Effects(font=Font(width=1.0, height=1.0)),
