@@ -17,9 +17,11 @@ python3 -m venv /tmp/microgrid-kicad
 python3 hardware/kicad/verify_schematic.py
 ```
 
-The capture is suitable for connectivity and design review. Seventeen
-footprints are assigned where the package is fixed by an exact orderable part:
-eight TO-220 MOSFETs, six SOT-23-5 OPA320 amplifiers, two wide-body SOIC-16
-AMC3330 isolators, and one SOT-23 TMP235 sensor. Remaining production symbols
-and footprints stay blank until their package, mounting, thermal copper,
-current-loop geometry, and mechanical interfaces pass review.
+The capture is suitable for connectivity and design review. A total of 120
+footprints are assigned for fixed-package semiconductors and
+mechanically-independent small passives. Higher-creepage 1206 packages are
+used for the voltage-divider upper legs; gate networks use 0805 packages.
+Large capacitors, magnetics, contactors, connectors, gate drivers, current
+sensors, and abstract logic blocks remain blank until their exact package,
+mounting, thermal copper, current-loop geometry, and mechanical interfaces
+pass review.

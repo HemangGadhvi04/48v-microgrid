@@ -132,6 +132,24 @@ def footprint(reference):
         return "Package_SO:SOIC-16W_7.5x10.3mm_P1.27mm"
     if reference == "U13":
         return "Package_TO_SOT_SMD:SOT-23"
+    if reference.startswith("QK"):
+        return "Package_TO_SOT_SMD:SOT-23"
+    if reference.startswith("DK"):
+        return "Diode_SMD:D_SMA"
+    if reference == "FBA":
+        return "Inductor_SMD:L_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
+    if reference == "NTAGND":
+        return "NetTie:NetTie-2_SMD_Pad0.5mm"
+    if reference.startswith("R") and reference not in {"RD", "RPRE"}:
+        if reference.startswith(("RU11H", "RU12H", "RPVH", "RDCH")):
+            return "Resistor_SMD:R_1206_3216Metric_Pad1.42x1.75mm_HandSolder"
+        if reference.startswith(("RG", "RGS")):
+            return "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
+        return "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
+    if reference.startswith("C") and reference not in {"CDC", "CF", "CIN"}:
+        if reference.startswith(("CBULK", "CVOC", "CB")):
+            return "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
+        return "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
     return ""
 
 
