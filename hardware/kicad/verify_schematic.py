@@ -50,6 +50,10 @@ assert "(pin power_in line" in schematic
 assert "(pin bidirectional line" in schematic
 assert "(pin input line" in schematic
 assert "(pin output line" in schematic
+assert schematic.count('Package_TO_SOT_THT:TO-220-3_Vertical') == 8
+assert schematic.count('Package_TO_SOT_SMD:SOT-23-5') == 6
+assert schematic.count('Package_SO:SOIC-16W_7.5x10.3mm_P1.27mm') == 2
+assert schematic.count('Package_TO_SOT_SMD:SOT-23"') == 1
 
 print(f"Verified KiCad schematic: {len(references)} symbols, {len(rows)} pins, "
       f"{len(expected_nets)} nets")

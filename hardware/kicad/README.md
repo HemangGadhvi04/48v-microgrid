@@ -17,8 +17,9 @@ python3 -m venv /tmp/microgrid-kicad
 python3 hardware/kicad/verify_schematic.py
 ```
 
-The capture is suitable for connectivity and design review. Production symbols
-and footprints are left
-blank deliberately because PCB placement, thermal copper, current-loop geometry,
-and mechanical interfaces have not passed their release gates. Assigning generic
-footprints before those choices would create false manufacturing readiness.
+The capture is suitable for connectivity and design review. Seventeen
+footprints are assigned where the package is fixed by an exact orderable part:
+eight TO-220 MOSFETs, six SOT-23-5 OPA320 amplifiers, two wide-body SOIC-16
+AMC3330 isolators, and one SOT-23 TMP235 sensor. Remaining production symbols
+and footprints stay blank until their package, mounting, thermal copper,
+current-loop geometry, and mechanical interfaces pass review.

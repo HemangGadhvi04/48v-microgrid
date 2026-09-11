@@ -122,6 +122,33 @@ def pin_type(reference, pin):
     return "passive"
 
 
+def footprint(reference):
+    """Return footprints only where the orderable package is already frozen."""
+    if re.fullmatch(r"Q[1-8]", reference):
+        return "Package_TO_SOT_THT:TO-220-3_Vertical"
+    if reference in {"U9", "U10", "U14", "U15", "UREF", "UREF2"}:
+        return "Package_TO_SOT_SMD:SOT-23-5"
+    if reference in {"U11", "U12"}:
+        return "Package_SO:SOIC-16W_7.5x10.3mm_P1.27mm"
+    if reference == "U13":
+        return "Package_TO_SOT_SMD:SOT-23"
+    return ""
+
+
+def datasheet(reference):
+    if re.fullmatch(r"Q[1-8]", reference):
+        return "https://www.ti.com/lit/ds/symlink/csd19536kcs.pdf"
+    if reference in {"U9", "U10", "U14", "U15", "UREF", "UREF2"}:
+        return "https://www.ti.com/lit/ds/symlink/opa320-q1.pdf"
+    if reference in {"U11", "U12"}:
+        return "https://www.ti.com/lit/ds/symlink/amc3330-q1.pdf"
+    if reference == "U13":
+        return "https://www.ti.com/lit/ds/symlink/tmp235-q1.pdf"
+    if reference in {"U6", "U7", "U8"}:
+        return "https://www.ti.com/lit/ds/symlink/tmcs1123.pdf"
+    return ""
+
+
 def make_lib_symbol(reference, pins, value):
     lib = Symbol.create_new(f"MG:{reference}", reference.rstrip("0123456789") or "U", value)
     lib.pinNames = True
@@ -158,8 +185,8 @@ def make_instance(schematic, reference, pins, value, x, y):
     symbol.properties = [
         Property("Reference", reference, 0, Position(x, y - 8, 0), font),
         Property("Value", value, 1, Position(x, y + 8, 0), font),
-        Property("Footprint", "", 2, Position(0, 0, 0), hidden),
-        Property("Datasheet", "", 3, Position(0, 0, 0), hidden),
+        Property("Footprint", footprint(reference), 2, Position(0, 0, 0), hidden),
+        Property("Datasheet", datasheet(reference), 3, Position(0, 0, 0), hidden),
     ]
     symbol.instances = [SymbolProjectInstance(
         name=PROJECT,
