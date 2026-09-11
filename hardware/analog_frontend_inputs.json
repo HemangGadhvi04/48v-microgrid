@@ -1,0 +1,34 @@
+{
+  "adc_reference_v": 3.3,
+  "output_filter_resistance_ohm": 1000.0,
+  "output_filter_capacitance_f": 4.7e-09,
+  "dc_voltage_channels": {
+    "part_number": "OPA320AQDBVRQ1G4",
+    "input_top_resistance_ohm": 200000.0,
+    "input_bottom_resistance_ohm": 10000.0,
+    "bottom_reference_v": 0.105,
+    "channels": {
+      "pv_voltage": {"minimum_v": 0.0, "maximum_v": 65.0},
+      "dc_bus_voltage": {"minimum_v": 0.0, "maximum_v": 60.0}
+    }
+  },
+  "isolated_ac_voltage_channels": {
+    "isolator_part_number": "AMC3330QDWERQ1",
+    "adc_driver_part_number": "OPA320AQDBVRQ1G4",
+    "line_resistance_ohm": 498000.0,
+    "shunt_resistance_ohm": 10000.0,
+    "isolator_gain": 2.0,
+    "difference_amplifier_gain": 0.75,
+    "adc_center_v": 1.65,
+    "minimum_v": -45.0,
+    "maximum_v": 45.0,
+    "isolator_input_limit_v": 1.0
+  },
+  "temperature_channel": {
+    "part_number": "TMP235AEDBZRQ1",
+    "minimum_c": -20.0,
+    "maximum_c": 125.0,
+    "offset_v": 0.5,
+    "gain_v_per_c": 0.01
+  }
+}

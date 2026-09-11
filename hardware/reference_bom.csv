@@ -14,8 +14,11 @@ K1,Main DC contactor,1,Albright SW80B,"96 VDC with blowouts; 100 A thermal; cont
 F1,PV/DC fuse,1,Littelfuse JLLN030.T,"30 A; 160 VDC; 50 kA DC interrupt rating",COORDINATION_PENDING,Littelfuse JLLN datasheet
 TVS1-TVS4,Switch-node clamp,4,TBD,Selected after double-pulse overshoot measurement,MEASUREMENT_DEPENDENT,Single-leg commissioning plan
 J1-Jn,Power connectors,TBD,Anderson SB50 with 8 AWG silver contacts,"600 V; 50 A CSA rating; keyed colors and enclosure boots assigned during layout",REFERENCE_CANDIDATE,Anderson SB50 datasheet
-U9-U12,Voltage sensing front end,4,TBD differential or isolated amplifier,"3.3 V ADC-compatible output; reinforced isolation where required; settled within 200 ns acquisition",ENGINEERING_REQUIRED,Sensing calculation and connectivity validation
-U13,Heatsink temperature sensor,1,TMP235 or equivalent,"-20 to 125 deg C range; buffered 10 mV/degC interface",REFERENCE_CANDIDATE,Sensing calculation
+U9-U10,PV and DC-bus voltage buffer,2,OPA320AQDBVRQ1G4,"1.8-5.5 V RRIO; 20 MHz; 0.9 pA maximum input bias; drives ADC input filter",REFERENCE_CANDIDATE,TI OPA320-Q1 product data and analog front-end calculation
+U11-U12,Isolated AC voltage amplifier,2,AMC3330QDWERQ1,"Reinforced isolation; integrated isolated DC/DC; +/-1 V input; fixed gain 2",REFERENCE_CANDIDATE,TI AMC3330-Q1 Rev B datasheet and analog front-end calculation
+U14-U15,Isolated-amplifier ADC driver,2,OPA320AQDBVRQ1G4,"0.75 V/V differential-to-single-ended stage centered at 1.65 V",REFERENCE_CANDIDATE,TI AMC3330-Q1 application circuit and analog front-end calculation
+UREF,Live-zero reference buffer,1,OPA320AQDBVRQ1G4,"Buffers 105 mV ratiometric reference for PV and DC-bus divider returns",REFERENCE_CANDIDATE,Analog front-end calculation
+U13,Heatsink temperature sensor,1,TMP235AEDBZRQ1,"-40 to 150 deg C; 500 mV at 0 deg C; nominal 10 mV/deg C",REFERENCE_CANDIDATE,TI TMP235-Q1 Rev D datasheet
 UEN1-UEN8,PWM hardware interlock gate,3,"1 x SN74HCS21QPWRQ1 plus 2 x SN74LVC08AQPWRG4Q1","Four safety terms generate shared enable; eight independent PWM channels are AND-gated",REFERENCE_CANDIDATE,TI logic datasheets and gate-drive calculation
 UTRIP,Hardware trip latch and combiner,1,SN74HCS02QPWRQ1,"Asynchronous NOR latch combines PV DC and grid overcurrent plus emergency stop; manual reset only",REFERENCE_CANDIDATE,TI logic datasheet and protection architecture
 UBIAS,Gate-bias supervisor,1,TPS3700QDSERQ1,"Adjustable 18 V window monitor; open-drain outputs qualify the 12 V gate rail",REFERENCE_CANDIDATE,TI TPS3700-Q1 datasheet

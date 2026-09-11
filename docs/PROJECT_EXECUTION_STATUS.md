@@ -9,11 +9,11 @@ until bench evidence exists.
 | Phase | Verified completion | Evidence complete | Remaining gate |
 |---|---:|---|---|
 | 1. Simulation foundation | 95% | All eight regression stages pass; report and plots retained | Repository release and publication |
-| 2. Power electronics hardware | 56% | Testbench requirements, portable control/protection, integrated real-time application, corner/loss and sensing calculations, exact TMCS1123B2-Q1 current-sensor variant, threshold/filter network and trip setting, manufacturer-curve-based E65 magnetic stack/turn sizing, tolerance-safe 30 mF DC-link bank, exact passive/fuse/connector candidates, contactor families, calculated bootstrap and independent PWM-disable chain, four-layer PCB current/spacing constraints, expanded BOM, reproducible first-pass KiCad capture covering 90 symbols/334 pins/98 logical nets, frozen LaunchPad allocation, host-tested ISR boundary, explicit ADC/PWM timing configuration, CPU1 peripheral initialization, and Driverlib adapter | KiCad native ERC and symbol/footprint refinement, remaining voltage/temperature front-end selection, magnetic window/thermal validation, PCB layout, target build and timing, assembly and 500 W bench test |
+| 2. Power electronics hardware | 58% | Testbench requirements, portable control/protection, integrated real-time application, corner/loss and sensing calculations, exact current/voltage/temperature front-end candidates with calculated ADC ranges, manufacturer-curve-based E65 magnetic stack/turn/conductor sizing, tolerance-safe 30 mF DC-link bank, exact passive/fuse/connector candidates, contactor families, calculated bootstrap and independent PWM-disable chain, four-layer PCB current/spacing constraints, expanded BOM, reproducible first-pass KiCad capture covering 90 symbols/334 pins/98 logical nets, frozen LaunchPad allocation, host-tested ISR boundary, explicit ADC/PWM timing configuration, CPU1 peripheral initialization, and Driverlib adapter | Expand front-end circuits into the KiCad connectivity model, native ERC and footprint refinement, exact bobbin/physical magnetic validation, PCB layout, target build and timing, assembly and 500 W bench test |
 | 3. Battery and grid interface | 55% | Bidirectional battery ECM, dynamic-phasor transition validation, dual-PLL application integration, grid-following/grid-forming transfer, portable droop, relay synchronization, and dual-side voltage measurement requirements | Cell characterization/BMS, switching and HIL transfer tests, grid emulator and measured transitions |
 | 4. Communications and SCADA | 78% | SunSpec 1/101 schema, matching embedded C and Python endpoints, bounded 3.5-character RTU framer, coherent ISR telemetry snapshots, C2000 SCI-B/RS-485 direction binding, durable gateway, InfluxDB writer, Grafana dashboard and host tests | Target build, physical commissioning, live services, endurance/fault testing and independent conformance checks |
 
-Approximate overall execution is now about 63%. About 37% remains, with
+Approximate overall execution is now about 64%. About 36% remains, with
 most remaining effort in physical design, procurement, assembly, commissioning,
 and safety-controlled bench validation.
 
@@ -52,6 +52,10 @@ and safety-controlled bench validation.
   0.600 V VOC setting; calculated sensor-conductor loss is 0.210 W worst case.
   The source schematic now includes VS, GND, VREF, VOC, OC, ALERT and NC pins,
   threshold dividers, 10 uF threshold stabilization, and local supply bypassing.
+- PV and DC-bus sensing now use calculated OPA320-Q1 live-zero divider stages;
+  PCC and utility sensing use AMC3330-Q1 isolated amplifiers with OPA320-Q1
+  ADC drivers; heatsink temperature uses TMP235-Q1. All eight nominal ADC
+  ranges pass the 0.1 V to 3.2 V design-margin test.
 - The PCB baseline is four layers with 70 micrometre outer copper, 12 mm DC and
   6 mm AC power paths, explicit analog/switch-node separation, and no reliance
   on vias as the primary high-current path.

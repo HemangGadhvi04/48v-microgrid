@@ -70,7 +70,8 @@ def write_outputs(data, result):
         "implementation",
     ]
     with (output_dir / "sensing_channels.csv").open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=csv_fields, extrasaction="ignore")
+        writer = csv.DictWriter(handle, fieldnames=csv_fields,
+                                extrasaction="ignore", lineterminator="\n")
         writer.writeheader()
         writer.writerows(result["channels"])
     with (output_dir / "sensing_metrics.json").open("w", encoding="utf-8") as handle:

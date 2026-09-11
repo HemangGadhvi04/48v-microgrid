@@ -5,6 +5,7 @@ test: regenerate test-python test-firmware
 regenerate:
 	python3 hardware/calculate_power_stage.py
 	python3 hardware/calculate_sensing.py
+	python3 hardware/calculate_analog_frontends.py
 	python3 hardware/calculate_magnetics.py
 	python3 hardware/calculate_magnetics_thermal.py
 	python3 hardware/calculate_passive_protection.py

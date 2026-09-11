@@ -1,0 +1,38 @@
+{
+  "dc_voltage_channels": {
+    "pv_voltage": {
+      "minimum_v": 0.0,
+      "maximum_v": 65.0,
+      "gain_v_per_v": 0.047619047619047616,
+      "offset_v": 0.1,
+      "adc_min_v": 0.1,
+      "adc_max_v": 3.195238095238095,
+      "divider_power_at_max_w": 0.02011904761904762
+    },
+    "dc_bus_voltage": {
+      "minimum_v": 0.0,
+      "maximum_v": 60.0,
+      "gain_v_per_v": 0.047619047619047616,
+      "offset_v": 0.1,
+      "adc_min_v": 0.1,
+      "adc_max_v": 2.957142857142857,
+      "divider_power_at_max_w": 0.017142857142857144
+    }
+  },
+  "isolated_ac_voltage": {
+    "divider_gain": 0.01968503937007874,
+    "system_gain_v_per_v": 0.02952755905511811,
+    "isolator_input_peak_v": 0.8858267716535433,
+    "isolator_input_limit_v": 1.0,
+    "adc_min_v": 0.32125984251968487,
+    "adc_max_v": 2.978740157480315,
+    "divider_power_at_peak_w": 0.003986220472440945
+  },
+  "temperature": {
+    "adc_min_v": 0.3,
+    "adc_max_v": 1.75,
+    "gain_v_per_c": 0.01,
+    "offset_v": 0.5
+  },
+  "output_filter_cutoff_hz": 33862.75384933943
+}

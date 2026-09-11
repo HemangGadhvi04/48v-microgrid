@@ -14,8 +14,8 @@ ohm and 4.7 nF output filter has a
 | dc_bus_voltage | 0.0 to 60.0 V | 0.100 to 2.957 V | 0.01692 V/count | 0.100 V |
 | pv_current | -2.0 to 25.0 A | 1.550 to 2.900 V | 0.01612 A/count | 0.400 V |
 | dc_inductor_current | -25.0 to 25.0 A | 0.400 to 2.900 V | 0.01612 A/count | 0.400 V |
-| grid_voltage | -45.0 to 45.0 V | 0.300 to 3.000 V | 0.02686 V/count | 0.300 V |
-| utility_voltage | -45.0 to 45.0 V | 0.300 to 3.000 V | 0.02686 V/count | 0.300 V |
+| grid_voltage | -45.0 to 45.0 V | 0.321 to 2.979 V | 0.02729 V/count | 0.321 V |
+| utility_voltage | -45.0 to 45.0 V | 0.321 to 2.979 V | 0.02729 V/count | 0.321 V |
 | grid_current | -30.0 to 30.0 A | 0.150 to 3.150 V | 0.01612 A/count | 0.150 V |
 | heatsink_temperature | -20.0 to 125.0 degC | 0.300 to 1.750 V | 0.08059 degC/count | 0.300 V |
 

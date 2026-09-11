@@ -58,11 +58,11 @@ For every ADC input, the table below derives scaling **only** from the actual se
 
 | Signal | Exact Component | Schematic Network | ADC Channel | Physical Range | ADC Range | Equation (Counts to Physical) | Status |
 |---|---|---|---|---:|---:|---|---|
-| PV Voltage | TBD (Buffer IC) | 200k/10k divider + 100mV offset | ADCA_14 | 0 - 65 V | 0.1 - 3.2V | TBD (Blocked pending Buffer P/N) | **BLOCKED** |
-| DC Bus Voltage | TBD (Buffer IC) | 200k/10k divider + 100mV offset | ADCC_3 | 0 - 60 V | 0.1 - 2.95V | TBD (Blocked pending Buffer P/N) | **BLOCKED** |
+| PV Voltage | OPA320AQDBVRQ1G4 | 200k/10k divider referenced to 105mV | ADCA_14 | 0 - 65 V | 0.100 - 3.195V | `V = (ADC_V - 0.1) / 0.0476190476` | **DESIGN PASS** |
+| DC Bus Voltage | OPA320AQDBVRQ1G4 | 200k/10k divider referenced to 105mV | ADCC_3 | 0 - 60 V | 0.100 - 2.957V | `V = (ADC_V - 0.1) / 0.0476190476` | **DESIGN PASS** |
 | PV Current | TMCS1123B2AQDVGRQ1 | direct / 1kΩ + 4.7nF filter | ADCB_3 | ±25 A | 0.4 - 2.9V | `I = ((counts / 4095) * 3.3 - 1.65) / 0.05` | **PASS** |
 | DC Inductor Current| TMCS1123B2AQDVGRQ1 | direct / 1kΩ + 4.7nF filter | ADCA_3 | ±25 A | 0.4 - 2.9V | `I = ((counts / 4095) * 3.3 - 1.65) / 0.05` | **PASS** |
 | Grid Current | TMCS1123B2AQDVGRQ1 | direct / 1kΩ + 4.7nF filter | ADCA_2 | ±30 A | 0.15 - 3.15V| `I = ((counts / 4095) * 3.3 - 1.65) / 0.05` | **PASS** |
-| PCC Voltage | TBD (Iso Amp IC) | TBD (Gain = 30 mV/V) | ADCC_2 | ±45 V | 0.3 - 3.0V | TBD (Blocked pending Iso Amp P/N) | **BLOCKED** |
-| Utility Voltage | TBD (Iso Amp IC) | TBD (Gain = 30 mV/V) | ADCB_2 | ±45 V | 0.3 - 3.0V | TBD (Blocked pending Iso Amp P/N) | **BLOCKED** |
-| Heatsink Temp | TBD (Sensor IC) | 500mV @ 0°C, 10mV/°C | ADCA_0 | -20 - 125 °C| 0.3 - 1.75V | TBD (Blocked pending Sensor P/N) | **BLOCKED** |
+| PCC Voltage | AMC3330QDWERQ1 + OPA320AQDBVRQ1G4 | 498k/10k divider, isolated gain 2, output gain 0.75 | ADCC_2 | ±45 V | 0.321 - 2.979V | `V = (ADC_V - 1.65) / 0.0295275591` | **DESIGN PASS** |
+| Utility Voltage | AMC3330QDWERQ1 + OPA320AQDBVRQ1G4 | 498k/10k divider, isolated gain 2, output gain 0.75 | ADCB_2 | ±45 V | 0.321 - 2.979V | `V = (ADC_V - 1.65) / 0.0295275591` | **DESIGN PASS** |
+| Heatsink Temp | TMP235AEDBZRQ1 | 500mV @ 0°C, nominal 10mV/°C | ADCA_0 | -20 - 125 °C| 0.3 - 1.75V | `T = (ADC_V - 0.5) / 0.01` | **DESIGN PASS** |

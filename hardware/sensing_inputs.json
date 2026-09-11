@@ -28,7 +28,7 @@
       "plant_max": 65.0,
       "adc_offset_v": 0.1,
       "adc_gain_v_per_unit": 0.047619047619,
-      "implementation": "200 kohm / 10 kohm divider with 100 mV live-zero offset and rail-to-rail buffer"
+      "implementation": "200 kohm / 10 kohm divider referenced to 105 mV; OPA320AQDBVRQ1G4 buffer"
     },
     {
       "name": "dc_bus_voltage",
@@ -37,7 +37,7 @@
       "plant_max": 60.0,
       "adc_offset_v": 0.1,
       "adc_gain_v_per_unit": 0.047619047619,
-      "implementation": "200 kohm / 10 kohm divider with 100 mV live-zero offset and rail-to-rail buffer"
+      "implementation": "200 kohm / 10 kohm divider referenced to 105 mV; OPA320AQDBVRQ1G4 buffer"
     },
     {
       "name": "pv_current",
@@ -63,8 +63,8 @@
       "plant_min": -45.0,
       "plant_max": 45.0,
       "adc_offset_v": 1.65,
-      "adc_gain_v_per_unit": 0.03,
-      "implementation": "differential or isolated amplifier, gain 30 mV/V, centered at 1.65 V"
+      "adc_gain_v_per_unit": 0.0295275590551,
+      "implementation": "AMC3330QDWERQ1 with 498 kohm / 10 kohm input divider and 0.75 V/V OPA320AQDBVRQ1G4 output stage"
     },
     {
       "name": "utility_voltage",
@@ -72,8 +72,8 @@
       "plant_min": -45.0,
       "plant_max": 45.0,
       "adc_offset_v": 1.65,
-      "adc_gain_v_per_unit": 0.03,
-      "implementation": "utility-side differential or isolated amplifier, gain 30 mV/V, centered at 1.65 V"
+      "adc_gain_v_per_unit": 0.0295275590551,
+      "implementation": "AMC3330QDWERQ1 with 498 kohm / 10 kohm input divider and 0.75 V/V OPA320AQDBVRQ1G4 output stage"
     },
     {
       "name": "grid_current",
@@ -91,7 +91,7 @@
       "plant_max": 125.0,
       "adc_offset_v": 0.5,
       "adc_gain_v_per_unit": 0.01,
-      "implementation": "buffered analog temperature sensor, 500 mV at 0 degC and 10 mV/degC"
+      "implementation": "TMP235AEDBZRQ1, 500 mV at 0 degC and nominal 10 mV/degC"
     }
   ]
 }
