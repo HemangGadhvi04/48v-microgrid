@@ -21,17 +21,27 @@ static void configure_output(uint32_t pin)
 
 static void configure_gpio(void)
 {
-    GPIO_setPinConfig(GPIO_0_EPWM1A); GPIO_setPinConfig(GPIO_1_EPWM1B);
-    GPIO_setPinConfig(GPIO_2_EPWM2A); GPIO_setPinConfig(GPIO_3_EPWM2B);
-    GPIO_setPinConfig(GPIO_4_EPWM3A); GPIO_setPinConfig(GPIO_5_EPWM3B);
-    GPIO_setPinConfig(GPIO_6_EPWM4A); GPIO_setPinConfig(GPIO_7_EPWM4B);
-    GPIO_setPinConfig(GPIO_18_SCITXDB); GPIO_setPinConfig(GPIO_19_SCIRXDB);
-    GPIO_setQualificationMode(MG_GPIO_RS485_RX, GPIO_QUAL_ASYNC);
+    GPIO_setPinConfig(GPIO_0_EPWM1A); GPIO_setPadConfig(0u, GPIO_PIN_TYPE_STD);
+    GPIO_setPinConfig(GPIO_1_EPWM1B); GPIO_setPadConfig(1u, GPIO_PIN_TYPE_STD);
+    GPIO_setPinConfig(GPIO_2_EPWM2A); GPIO_setPadConfig(2u, GPIO_PIN_TYPE_STD);
+    GPIO_setPinConfig(GPIO_3_EPWM2B); GPIO_setPadConfig(3u, GPIO_PIN_TYPE_STD);
+    GPIO_setPinConfig(GPIO_4_EPWM3A); GPIO_setPadConfig(4u, GPIO_PIN_TYPE_STD);
+    GPIO_setPinConfig(GPIO_5_EPWM3B); GPIO_setPadConfig(5u, GPIO_PIN_TYPE_STD);
+    GPIO_setPinConfig(GPIO_6_EPWM4A); GPIO_setPadConfig(6u, GPIO_PIN_TYPE_STD);
+    GPIO_setPinConfig(GPIO_7_EPWM4B); GPIO_setPadConfig(7u, GPIO_PIN_TYPE_STD);
+    GPIO_setPinConfig(GPIO_18_SCITXDB); GPIO_setPadConfig(MG_GPIO_RS485_TX, GPIO_PIN_TYPE_STD);
+    GPIO_setPinConfig(GPIO_19_SCIRXDB); GPIO_setPadConfig(MG_GPIO_RS485_RX, GPIO_PIN_TYPE_PULLUP);
+    
     GPIO_setDirectionMode(MG_GPIO_TRIP_LATCH_N, GPIO_DIR_MODE_IN);
-    GPIO_setDirectionMode(MG_GPIO_ESTOP_N, GPIO_DIR_MODE_IN);
-    GPIO_setDirectionMode(MG_GPIO_BIAS_POWER_GOOD, GPIO_DIR_MODE_IN);
+    GPIO_setPadConfig(MG_GPIO_TRIP_LATCH_N, GPIO_PIN_TYPE_PULLUP);
     GPIO_setQualificationMode(MG_GPIO_TRIP_LATCH_N, GPIO_QUAL_ASYNC);
+    
+    GPIO_setDirectionMode(MG_GPIO_ESTOP_N, GPIO_DIR_MODE_IN);
+    GPIO_setPadConfig(MG_GPIO_ESTOP_N, GPIO_PIN_TYPE_PULLUP);
     GPIO_setQualificationMode(MG_GPIO_ESTOP_N, GPIO_QUAL_ASYNC);
+    
+    GPIO_setDirectionMode(MG_GPIO_BIAS_POWER_GOOD, GPIO_DIR_MODE_IN);
+    GPIO_setPadConfig(MG_GPIO_BIAS_POWER_GOOD, GPIO_PIN_TYPE_PULLUP);
 
     configure_output(MG_GPIO_PRECHARGE_RELAY);
     configure_output(MG_GPIO_MAIN_CONTACTOR);

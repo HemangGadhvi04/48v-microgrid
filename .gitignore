@@ -42,3 +42,11 @@ _autosave-*
 
 # Host firmware builds
 firmware/**/build/
+
+# Installers / Large binaries
+*.zip
+*.tar.gz
+*.app/
+*.orig
+*.diff
+*.patch

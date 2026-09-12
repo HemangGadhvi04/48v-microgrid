@@ -62,12 +62,9 @@ and safety-controlled bench validation.
 
 ## Immediate execution sequence
 
-1. Freeze the specific controller board, semiconductor technology, gate-driver
-   supply approach, sensors, test sources, and available instruments.
-2. Produce the DC-DC power-stage loss model, magnetic design, schematic, and BOM.
-3. Bind the portable firmware to C2000 ADC, ePWM, Trip Zone, GPIO, and SCI
-   driver-library calls using the frozen allocation, then verify timing on target.
-4. Build the single-leg fixture, then the buck-boost board, then the inverter
-   and LCL board using the staged procedure in the Phase 2 specification.
-5. Retain measured waveforms, calibration records, trip tests, efficiency maps,
-   and thermal results as Phase 2 exit evidence.
+The project has transitioned to a rigorous 10-Gate hardware transition framework. The immediate next steps are:
+
+1. **Gate 1B-1D (Pending User Action):** Perform physical target compilation in TI Code Composer Studio (CCS), flash the F28379D LaunchPad, and verify deterministic ADC/PWM/ISR timing and hardware Trip Zone functionality via oscilloscope.
+2. **Gate 2 (Magnetics Redesign):** Redesign the E65 Kool Mµ inductors (more parallel strands, larger cores, or different topology) to resolve the DCR limit failures (LDC currently 38.67 mΩ > 15 mΩ).
+3. **Gate 2 (Electrical Design):** Complete the semiconductor loss models, select final unresolved analog frontend ICs (buffers/isolation amplifiers), and freeze the Gate 2 electrical schematic.
+4. **Gate 3-10:** Proceed sequentially through PCB layout, low-voltage bring-up, and staged power testing up to 500 W.

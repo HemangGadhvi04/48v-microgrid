@@ -4,6 +4,10 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#ifdef __TI_COMPILER_VERSION__
+#define uint8_t uint16_t
+#endif
+
 #define MG_SUNSPEC_BASE_REGISTER 40000u
 #define MG_SUNSPEC_REGISTER_COUNT 124u
 #define MG_SUNSPEC_UNIT_ID 1u

@@ -9,6 +9,7 @@ typedef int mg_f28379d_target_build_disabled_t;
 #include "microgrid_rtu_transport.h"
 #include "f28379d_board_contract.h"
 #include "protection.h"
+#include "pwm.h"
 
 static mg_c2000_runtime_t runtime;
 static mg_c2000_rtu_transport_t rtu_transport;
@@ -41,7 +42,10 @@ static mg_c2000_digital_input_t target_read_digital(void *context)
         .reset_request=reset_request,
         .emergency_stop=GPIO_readPin(MG_GPIO_ESTOP_N)==0u,
         .hardware_trip=GPIO_readPin(MG_GPIO_TRIP_LATCH_N)==0u
-            ||GPIO_readPin(MG_GPIO_BIAS_POWER_GOOD)==0u};
+            ||GPIO_readPin(MG_GPIO_BIAS_POWER_GOOD)==0u || is_pwm_tripped(0) || is_pwm_tripped(1) || is_pwm_tripped(2) || is_pwm_tripped(3)};
+    if (reset_request && GPIO_readPin(MG_GPIO_TRIP_LATCH_N)!=0u && GPIO_readPin(MG_GPIO_ESTOP_N)!=0u && GPIO_readPin(MG_GPIO_BIAS_POWER_GOOD)!=0u) {
+        clear_pwm_trip();
+    }
     reset_request=false;
     return input;
 }
@@ -71,12 +75,13 @@ static void target_apply(void *context,const mg_app_output_t *output)
     const bool hardware_safe=GPIO_readPin(MG_GPIO_TRIP_LATCH_N)!=0u
         &&GPIO_readPin(MG_GPIO_ESTOP_N)!=0u
         &&GPIO_readPin(MG_GPIO_BIAS_POWER_GOOD)!=0u;
-    if(output->pwm_enable&&hardware_safe){
-        clear_pwm_trip();
-    }else{
-        force_pwm_trip();
+    if (output->pwm_enable && hardware_safe) {
+        for (uint16_t i = 0; i < 4; i++) { enable_pwm_switching(i); }
+        GPIO_writePin(MG_GPIO_PWM_ARM, 1u);
+    } else {
+        GPIO_writePin(MG_GPIO_PWM_ARM, 0u);
+        for (uint16_t i = 0; i < 4; i++) { disable_pwm_switching(i); }
     }
-    GPIO_writePin(MG_GPIO_PWM_ARM,output->pwm_enable&&hardware_safe?1u:0u);
     GPIO_writePin(MG_GPIO_PRECHARGE_RELAY,output->precharge_relay?1u:0u);
     GPIO_writePin(MG_GPIO_MAIN_CONTACTOR,output->main_contactor?1u:0u);
     GPIO_writePin(MG_GPIO_GRID_BREAKER,output->grid_breaker_close?1u:0u);

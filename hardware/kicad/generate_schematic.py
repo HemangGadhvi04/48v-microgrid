@@ -40,8 +40,8 @@ def natural(text):
 
 def candidate(reference, description):
     fixed = {
-        "Q": "CSD19536KCS", "U1": "UCC27211A", "U2": "UCC27211A",
-        "U3": "UCC27211A", "U4": "UCC27211A", "U5": "LAUNCHXL-F28379D",
+        "Q": "CSD19536KCS", "U1": "UCC27211AQDDARQ1", "U2": "UCC27211AQDDARQ1",
+        "U3": "UCC27211AQDDARQ1", "U4": "UCC27211AQDDARQ1", "U5": "LAUNCHXL-F28379D",
         "U6": "TMCS1123B2AQDVGRQ1", "U7": "TMCS1123B2AQDVGRQ1",
         "U8": "TMCS1123B2AQDVGRQ1",
         "U9": "OPA320AQDBVRQ1G4", "U10": "OPA320AQDBVRQ1G4",
@@ -122,10 +122,26 @@ def pin_type(reference, pin):
     return "passive"
 
 
+def pin_number(reference, pin):
+    """Bind functional names to manufacturer package pin numbers."""
+    if re.fullmatch(r"U[1-4]", reference):
+        return {"VDD": "1", "HB": "2", "HO": "3", "HS": "4",
+                "HI": "5", "LI": "6", "VSS": "7", "LO": "8"}[pin]
+    if reference in {"U6", "U7", "U8"}:
+        return {"IP+": "1", "IP-": "2", "GND": "3", "ALERT": "4",
+                "VREF": "5", "VOUT": "6", "OC": "7", "VS": "8",
+                "VOC": "9", "NC": "10"}[pin]
+    return pin
+
+
 def footprint(reference):
     """Return footprints only where the orderable package is already frozen."""
     if re.fullmatch(r"Q[1-8]", reference):
         return "Package_TO_SOT_THT:TO-220-3_Vertical"
+    if reference in {"U1", "U2", "U3", "U4"}:
+        return "Package_SO:SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.95x3.4mm"
+    if reference in {"U6", "U7", "U8"}:
+        return "Microgrid_48V:DVG0010A_HV"
     if reference in {"U9", "U10", "U14", "U15", "UREF", "UREF2"}:
         return "Package_TO_SOT_SMD:SOT-23-5"
     if reference in {"U11", "U12"}:
@@ -156,6 +172,8 @@ def footprint(reference):
 def datasheet(reference):
     if re.fullmatch(r"Q[1-8]", reference):
         return "https://www.ti.com/lit/ds/symlink/csd19536kcs.pdf"
+    if reference in {"U1", "U2", "U3", "U4"}:
+        return "https://www.ti.com/lit/ds/symlink/ucc27211a-q1.pdf"
     if reference in {"U9", "U10", "U14", "U15", "UREF", "UREF2"}:
         return "https://www.ti.com/lit/ds/symlink/opa320-q1.pdf"
     if reference in {"U11", "U12"}:
@@ -183,7 +201,7 @@ def make_lib_symbol(reference, pins, value):
         unit.pins.append(SymbolPin(
             electricalType=pin_type(reference, row["pin"]), graphicalStyle="line",
             position=Position(-12.70, y, 0), length=2.54,
-            name=row["pin"], number=row["pin"],
+            name=row["pin"], number=pin_number(reference, row["pin"]),
             nameEffects=Effects(font=Font(width=1.0, height=1.0)),
             numberEffects=Effects(font=Font(width=1.0, height=1.0))))
     lib.units = [unit]
@@ -213,7 +231,7 @@ def make_instance(schematic, reference, pins, value, x, y):
             reference=reference, unit=1)])]
     for index, row in enumerate(pins):
         pin_uuid = uid()
-        symbol.pins[row["pin"]] = pin_uuid
+        symbol.pins[pin_number(reference, row["pin"])] = pin_uuid
         py = y + (index - (len(pins) - 1) / 2.0) * 2.54
         if row["net"].startswith("NC_"):
             schematic.noConnects.append(NoConnect(

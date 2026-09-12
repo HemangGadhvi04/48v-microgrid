@@ -54,3 +54,14 @@ void start_epwm(void)
     }
 }
 #endif
+
+void enable_pwm_switching(uint16_t index) {
+    if (index >= 4) return;
+    EPWM_setActionQualifierContSWForceAction(pwm_bases[index], EPWM_AQ_OUTPUT_A, EPWM_AQ_SW_DISABLED);
+    EPWM_setActionQualifierContSWForceAction(pwm_bases[index], EPWM_AQ_OUTPUT_B, EPWM_AQ_SW_DISABLED);
+}
+void disable_pwm_switching(uint16_t index) {
+    if (index >= 4) return;
+    EPWM_setActionQualifierContSWForceAction(pwm_bases[index], EPWM_AQ_OUTPUT_A, EPWM_AQ_SW_OUTPUT_LOW);
+    EPWM_setActionQualifierContSWForceAction(pwm_bases[index], EPWM_AQ_OUTPUT_B, EPWM_AQ_SW_OUTPUT_LOW);
+}

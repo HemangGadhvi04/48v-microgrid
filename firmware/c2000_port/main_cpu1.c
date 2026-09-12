@@ -15,7 +15,10 @@ void main(void)
     EINT;
     ERTM;
     for(;;)mg_f28379d_service_serial();
-}
 #else
 typedef int mg_f28379d_main_build_disabled_t;
 #endif
+
+
+
+}

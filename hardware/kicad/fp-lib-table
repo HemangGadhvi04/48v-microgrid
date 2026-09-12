@@ -1,0 +1,3 @@
+(fp_lib_table
+  (lib (name "Microgrid_48V")(type "KiCad")(uri "${KIPRJMOD}/Microgrid_48V.pretty")(options "")(descr "Project-local manufacturer land patterns"))
+)

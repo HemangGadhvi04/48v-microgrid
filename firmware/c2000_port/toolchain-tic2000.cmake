@@ -21,9 +21,9 @@ set(CMAKE_AR "${TI_CGT_PATH}/bin/ar2000")
 # F28379D specific flags
 set(TI_MCU_FLAGS "-v28 -ml -mt --cla_support=cla1 --float_support=fpu32 --tmu_support=tmu0 --vcu_support=vcu2")
 
-set(CMAKE_C_FLAGS "${TI_MCU_FLAGS} -O2 --opt_for_speed=2 --symdebug:dwarf --c11 --diag_warning=225 --diag_wrap=off --display_error_number --abi=eabi")
+set(CMAKE_C_FLAGS "${TI_MCU_FLAGS} -O2 --opt_for_speed=2 --symdebug:dwarf --c11 --diag_warning=225 --diag_wrap=off --display_error_number --abi=eabi --define=uint8_t=uint16_t --include_path=\"${TI_CGT_PATH}/include\"")
 set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS}")
 set(CMAKE_ASM_FLAGS "${TI_MCU_FLAGS}")
 
 # Linker flags (ROM model, map file generation, stack size)
-set(CMAKE_EXE_LINKER_FLAGS "-z -m microgrid_f28379d.map --stack_size=0x400 --warn_sections -i ${TI_CGT_PATH}/lib -i ${TI_CGT_PATH}/include --reread_libs --rom_model")
+set(CMAKE_EXE_LINKER_FLAGS "-z -m microgrid_f28379d.map --stack_size=0x300 --warn_sections -i ${TI_CGT_PATH}/lib -i ${TI_CGT_PATH}/include --reread_libs --rom_model")

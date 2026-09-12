@@ -50,7 +50,7 @@ the two independent PLL measurements pass phase, frequency, and voltage checks.
 
 ## Gate-driver interlocks
 
-- Each UCC27211A gets independent high-side and low-side PWM inputs, series gate
+- Each UCC27211AQDDARQ1 gets independent high-side and low-side PWM inputs, series gate
   resistors with diode footprints for asymmetric turn-on/off tuning, gate-source
   pulldowns, external bootstrap capacitor using the driver's internal diode, and
   Kelvin driver return.

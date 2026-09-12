@@ -1,6 +1,6 @@
 reference,function,quantity,candidate,minimum_requirement,status,evidence
 Q1-Q8,Power MOSFET,8,CSD19536KCS,100 V N-channel; hot RDS(on) used in loss model,REFERENCE_CANDIDATE,TI product page and Rev C datasheet
-U1-U4,Half-bridge gate driver,4,UCC27211A,120 V bootstrap driver; independent inputs; UVLO,REFERENCE_CANDIDATE,TI Rev D datasheet
+U1-U4,Half-bridge gate driver,4,UCC27211AQDDARQ1,"120 V bootstrap driver; independent inputs; UVLO; DDA PowerPAD-8",FROZEN_CANDIDATE,TI UCC27211A-Q1 Rev C datasheet
 U5,Controller,1,LAUNCHXL-F28379D,200 MHz C2000 F28379D development board,SELECTED_FOR_PROTOTYPE,TI development-kit page
 U6-U8,Isolated current sensor,3,TMCS1123B2AQDVGRQ1,"3.3 V; 50 mV/A; +/-31 A linear range; 250 kHz bandwidth; fast overcurrent alert",REFERENCE_CANDIDATE,TI Rev D datasheet
 LDC,DC-DC inductor,1,Custom or catalog part,500 uH; saturation at least 25 A; DCR at most 15 mOhm; characterized core loss,ENGINEERING_REQUIRED,Power-stage calculation

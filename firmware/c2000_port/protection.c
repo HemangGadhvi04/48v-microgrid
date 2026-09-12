@@ -51,3 +51,8 @@ void force_pwm_trip(void)
     }
 }
 #endif
+
+bool is_pwm_tripped(uint16_t index) {
+    if (index >= 4) return false;
+    return (EPWM_getTripZoneFlagStatus(pwm_bases[index]) & EPWM_TZ_FLAG_OST) != 0;
+}
